@@ -23,6 +23,11 @@ class MainScreen(Screen):
         app.stats['planet_habitability'] += 7
         app.stats['year'] += 1
         app.stats['day'] += 1
+        app.stats['ideologies']['anarchists'] += 1
+        app.stats['ideologies']['authoritarians'] += 2
+        app.stats['ideologies']['communitarians'] += 3
+        app.stats['ideologies']['communists'] += 4
+        app.stats['ideologies']['conservatives'] += 5
 
 class LoadingScreen(Screen):
     pass
@@ -39,6 +44,13 @@ class TheRememberingOneApp(App):
             'base_modules':{
                 'habitation':100,
                 'greenhouse':10
+            },
+            'ideologies':{
+                'anarchists':20,
+                'authoritarians':30,
+                'communitarians':100,
+                'communists':60,
+                'conservatives':30
             },
             'planet_habitability':0,
             'year':0,
@@ -66,6 +78,12 @@ class TheRememberingOneApp(App):
 
         self.__ids.habitation.text = str(app.stats['base_modules']['habitation'])
         self.__ids.greenhouse.text = str(app.stats['base_modules']['greenhouse'])
+
+        self.__ids.anarchists_fill.size = (app.stats['ideologies']['anarchists'],self.__ids.anarchists_fill.parent.height)
+        self.__ids.authoritarians_fill.size = (app.stats['ideologies']['authoritarians'],self.__ids.authoritarians_fill.parent.height)
+        self.__ids.communitarians_fill.size = (app.stats['ideologies']['communitarians'],self.__ids.communitarians_fill.parent.height)
+        self.__ids.communists_fill.size = (app.stats['ideologies']['communists'],self.__ids.communists_fill.parent.height)
+        self.__ids.conservatives_fill.size = (app.stats['ideologies']['conservatives'],self.__ids.conservatives_fill.parent.height)
 
 
 if __name__ == '__main__':

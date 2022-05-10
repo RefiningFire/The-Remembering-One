@@ -1,16 +1,55 @@
-<SideBox@BoxLayout>:
+<CornerBox@BoxLayout>:
+    orientation: 'vertical'
+    padding: [10]
+    spacing: 10
+    size_hint: None, None
+
+<CornerItemBox@BoxLayout>:
     orientation: 'horizontal'
     padding: [5]
 
-<SideCount@Label>:
-    size_hint: None, None
-    size: 120, self.parent.height - self.parent.parent.spacing
-
-<DateBox@BoxLayout>:
+<SideItemBox@BoxLayout>:
     orientation: 'vertical'
     padding: [5]
     size_hint: None, None
     size: 100, self.parent.height - self.parent.padding[0] - self.padding[0]
+
+<SideBox@BoxLayout>:
+    orientation: 'horizontal'
+    padding: [10]
+    spacing: 10
+    size_hint: None, None
+
+
+<CountLabel@Label>:
+    size_hint: None, None
+    size: 120, self.parent.height - self.parent.parent.spacing
+
+<IdeologyMeter@BoxLayout>:
+    orientation: 'horizontal'
+    padding: [0]
+    spacing: 0
+    size_hint: None, None
+    size: 100, self.parent.height - self.parent.spacing - self.parent.parent.spacing
+    canvas:
+        Color:
+            rgba: (100,100,100,1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10,10,10,10]
+
+<IdeologyFill@Label>:
+    size_hint: None, None
+    pos: 0,0
+    canvas:
+        Color:
+            rgba: (0,100,0,1)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [5,5,5,5]
+
 
 <MainScreen>:
     FloatLayout:
@@ -23,12 +62,8 @@
                 on_press:
                     root.increase()
                     app.load_buttons()
-        BoxLayout:
+        CornerBox:
             id: pops
-            orientation: 'vertical'
-            padding: [10]
-            spacing: 10
-            size_hint: None, None
             size: 250, len(self.children)*50
             pos: 0, self.parent.height - self.height
             canvas:
@@ -38,41 +73,37 @@
                     size: self.size
                     pos: self.pos
                     radius: [0,0,30,0]
-            SideBox:
+            CornerItemBox:
                 id: babies
                 Label:
                     text: 'Babies:'
-                SideCount:
+                CountLabel:
                     id: babies_count
                     text: str(app.stats['pops']['babies'])
-            SideBox:
+            CornerItemBox:
                 id: children
                 Label:
                     text: 'Children:'
-                SideCount:
+                CountLabel:
                     id: children_count
                     text: str(app.stats['pops']['children'])
-            SideBox:
+            CornerItemBox:
                 id: teens
                 Label:
                     text: 'Teens:'
-                SideCount:
+                CountLabel:
                     id: teens_count
                     text: str(app.stats['pops']['teens'])
-            SideBox:
+            CornerItemBox:
                 id: settlers
                 Label:
                     text: 'Settlers:'
-                SideCount:
+                CountLabel:
                     id: settlers_count
                     text: str(app.stats['pops']['settlers'])
 
-        BoxLayout:
+        SideBox:
             id: status
-            orientation: 'horizontal'
-            padding: [10]
-            spacing: 10
-            size_hint: None, None
             size: len(self.children)*200, 100
             pos: self.parent.width/2-self.width/2, self.parent.height-self.height
             canvas:
@@ -90,25 +121,21 @@
                 Label:
                     id: planet_habitability
                     text: str(app.stats['planet_habitability'])
-            DateBox:
+            SideItemBox:
                 Label:
                     text: 'Year'
                 Label:
                     id: year
                     text: str(app.stats['year'])
-            DateBox:
+            SideItemBox:
                 Label:
                     text: 'Day'
                 Label:
                     id: day
                     text: str(app.stats['day'])
 
-        BoxLayout:
+        CornerBox:
             id: modules
-            orientation: 'vertical'
-            padding: [10]
-            spacing: 10
-            size_hint: None, None
             size: 350, len(self.children)*50
             pos: self.parent.width-self.width, self.parent.height-self.height
             canvas:
@@ -118,18 +145,65 @@
                     size: self.size
                     pos: self.pos
                     radius: [0,0,0,30]
-            SideBox:
+            CornerItemBox:
                 Label:
                     text: 'Habitation:'
-                SideCount:
+                CountLabel:
                     id: habitation
                     text: str(app.stats['base_modules']['habitation'])
-            SideBox:
+            CornerItemBox:
                 Label:
                     text: 'Greenhouse:'
-                SideCount:
+                CountLabel:
                     id: greenhouse
                     text: str(app.stats['base_modules']['greenhouse'])
+
+        CornerBox:
+            id: ideologies
+            size: 400, len(self.children)*50
+            pos: 0, 0
+            canvas:
+                Color:
+                    rgba: (200,0,0,0.5)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [30,30,0,0]
+            CornerItemBox:
+                Label:
+                    text: 'Anarchists:'
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: anarchists_fill
+                        size: app.stats['ideologies']['anarchists'], self.parent.height
+            CornerItemBox:
+                Label:
+                    text: 'Authoritarians:'
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: authoritarians_fill
+                        size: app.stats['ideologies']['authoritarians'], self.parent.height
+            CornerItemBox:
+                Label:
+                    text: 'Communitarians:'
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: communitarians_fill
+                        size: app.stats['ideologies']['communitarians'], self.parent.height
+            CornerItemBox:
+                Label:
+                    text: 'Communists:'
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: communists_fill
+                        size: app.stats['ideologies']['communists'], self.parent.height
+            CornerItemBox:
+                Label:
+                    text: 'Conservatives:'
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: conservatives_fill
+                        size: app.stats['ideologies']['conservatives'], self.parent.height
 
 
 <LoadingScreen>:
