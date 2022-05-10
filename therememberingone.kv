@@ -1,3 +1,17 @@
+<SideBox@BoxLayout>:
+    orientation: 'horizontal'
+    padding: [5]
+
+<SideCount@Label>:
+    size_hint: None, None
+    size: 120, self.parent.height - self.parent.parent.spacing
+
+<DateBox@BoxLayout>:
+    orientation: 'vertical'
+    padding: [5]
+    size_hint: None, None
+    size: 100, self.parent.height - self.parent.padding[0] - self.padding[0]
+
 <MainScreen>:
     FloatLayout:
         BoxLayout:
@@ -5,7 +19,7 @@
             size: 100, 100
             pos: self.parent.width/2,self.parent.height/2
             Button:
-                text: 'Go to Loading'
+                text: 'Increase'
                 on_press:
                     root.increase()
                     app.load_buttons()
@@ -20,54 +34,102 @@
             canvas:
                 Color:
                     rgba: (200,0,0,0.5)
-                Rectangle:
+                RoundedRectangle:
                     size: self.size
                     pos: self.pos
-            BoxLayout:
+                    radius: [0,0,30,0]
+            SideBox:
                 id: babies
-                orientation: 'horizontal'
-                padding: [5]
                 Label:
                     text: 'Babies:'
-                Label:
+                SideCount:
                     id: babies_count
                     text: str(app.stats['pops']['babies'])
-                    size_hint: None, None
-                    size: 120, self.parent.height - self.parent.parent.spacing
-            BoxLayout:
+            SideBox:
                 id: children
-                orientation: 'horizontal'
-                padding: [5]
                 Label:
                     text: 'Children:'
-                Label:
+                SideCount:
                     id: children_count
                     text: str(app.stats['pops']['children'])
-                    size_hint: None, None
-                    size: 120, self.parent.height - self.parent.parent.spacing
-            BoxLayout:
+            SideBox:
                 id: teens
-                orientation: 'horizontal'
-                padding: [5]
                 Label:
                     text: 'Teens:'
-                Label:
+                SideCount:
                     id: teens_count
                     text: str(app.stats['pops']['teens'])
-                    size_hint: None, None
-                    size: 120, self.parent.height - self.parent.parent.spacing
-            BoxLayout:
+            SideBox:
                 id: settlers
-                orientation: 'horizontal'
-                padding: [5]
                 Label:
                     text: 'Settlers:'
-                Label:
+                SideCount:
                     id: settlers_count
                     text: str(app.stats['pops']['settlers'])
-                    size_hint: None, None
-                    size: 120, self.parent.height - self.parent.parent.spacing
 
+        BoxLayout:
+            id: status
+            orientation: 'horizontal'
+            padding: [10]
+            spacing: 10
+            size_hint: None, None
+            size: len(self.children)*200, 100
+            pos: self.parent.width/2-self.width/2, self.parent.height-self.height
+            canvas:
+                Color:
+                    rgba: (200,0,0,0.5)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [0,0,30,30]
+            BoxLayout:
+                orientation: 'vertical'
+                padding: [5]
+                Label:
+                    text: 'Planet Habitability'
+                Label:
+                    id: planet_habitability
+                    text: str(app.stats['planet_habitability'])
+            DateBox:
+                Label:
+                    text: 'Year'
+                Label:
+                    id: year
+                    text: str(app.stats['year'])
+            DateBox:
+                Label:
+                    text: 'Day'
+                Label:
+                    id: day
+                    text: str(app.stats['day'])
+
+        BoxLayout:
+            id: modules
+            orientation: 'vertical'
+            padding: [10]
+            spacing: 10
+            size_hint: None, None
+            size: 350, len(self.children)*50
+            pos: self.parent.width-self.width, self.parent.height-self.height
+            canvas:
+                Color:
+                    rgba: (200,0,0,0.5)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [0,0,0,30]
+            SideBox:
+                Label:
+                    text: 'Habitation:'
+                SideCount:
+                    id: habitation
+                    text: str(app.stats['base_modules']['habitation'])
+            SideBox:
+                Label:
+                    text: 'Greenhouse:'
+                SideCount:
+                    id: greenhouse
+                    text: str(app.stats['base_modules']['greenhouse'])
 
 
 <LoadingScreen>:

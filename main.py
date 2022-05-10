@@ -18,6 +18,11 @@ class MainScreen(Screen):
         app.stats['pops']['teens'] += 4
         app.stats['pops']['children'] += 3
         app.stats['pops']['babies'] += 2
+        app.stats['base_modules']['habitation'] += 1
+        app.stats['base_modules']['greenhouse'] -= 1
+        app.stats['planet_habitability'] += 7
+        app.stats['year'] += 1
+        app.stats['day'] += 1
 
 class LoadingScreen(Screen):
     pass
@@ -36,7 +41,8 @@ class TheRememberingOneApp(App):
                 'greenhouse':10
             },
             'planet_habitability':0,
-            'generation':0
+            'year':0,
+            'day':0
 
         }
 
@@ -53,6 +59,13 @@ class TheRememberingOneApp(App):
         self.__ids.children_count.text = str(app.stats['pops']['children'])
         self.__ids.teens_count.text = str(app.stats['pops']['teens'])
         self.__ids.settlers_count.text = str(app.stats['pops']['settlers'])
+
+        self.__ids.planet_habitability.text = str(app.stats['planet_habitability'])
+        self.__ids.year.text = str(app.stats['year'])
+        self.__ids.day.text = str(app.stats['day'])
+
+        self.__ids.habitation.text = str(app.stats['base_modules']['habitation'])
+        self.__ids.greenhouse.text = str(app.stats['base_modules']['greenhouse'])
 
 
 if __name__ == '__main__':
