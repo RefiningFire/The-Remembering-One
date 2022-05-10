@@ -1,0 +1,84 @@
+<MainScreen>:
+    FloatLayout:
+        BoxLayout:
+            size_hint: None, None
+            size: 100, 100
+            pos: self.parent.width/2,self.parent.height/2
+            Button:
+                text: 'Go to Loading'
+                on_press:
+                    root.increase()
+                    app.load_buttons()
+        BoxLayout:
+            id: pops
+            orientation: 'vertical'
+            padding: [10]
+            spacing: 10
+            size_hint: None, None
+            size: 250, len(self.children)*50
+            pos: 0, self.parent.height - self.height
+            canvas:
+                Color:
+                    rgba: (200,0,0,0.5)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            BoxLayout:
+                id: babies
+                orientation: 'horizontal'
+                padding: [5]
+                Label:
+                    text: 'Babies:'
+                Label:
+                    id: babies_count
+                    text: str(app.stats['pops']['babies'])
+                    size_hint: None, None
+                    size: 120, self.parent.height - self.parent.parent.spacing
+            BoxLayout:
+                id: children
+                orientation: 'horizontal'
+                padding: [5]
+                Label:
+                    text: 'Children:'
+                Label:
+                    id: children_count
+                    text: str(app.stats['pops']['children'])
+                    size_hint: None, None
+                    size: 120, self.parent.height - self.parent.parent.spacing
+            BoxLayout:
+                id: teens
+                orientation: 'horizontal'
+                padding: [5]
+                Label:
+                    text: 'Teens:'
+                Label:
+                    id: teens_count
+                    text: str(app.stats['pops']['teens'])
+                    size_hint: None, None
+                    size: 120, self.parent.height - self.parent.parent.spacing
+            BoxLayout:
+                id: settlers
+                orientation: 'horizontal'
+                padding: [5]
+                Label:
+                    text: 'Settlers:'
+                Label:
+                    id: settlers_count
+                    text: str(app.stats['pops']['settlers'])
+                    size_hint: None, None
+                    size: 120, self.parent.height - self.parent.parent.spacing
+
+
+
+<LoadingScreen>:
+    FloatLayout:
+        BoxLayout:
+            size_hint: None, None
+            size: 100, 100
+            pos: self.parent.width/2,self.parent.height/2
+            Button:
+                text: 'Go to Main'
+                on_press:
+                    root.load_buttons()
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'main'
