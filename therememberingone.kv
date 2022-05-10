@@ -33,7 +33,7 @@
     size: 100, self.parent.height - self.parent.spacing - self.parent.parent.spacing
     canvas:
         Color:
-            rgba: (100,100,100,1)
+            rgba: (100,0,0,1)
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -64,7 +64,7 @@
                     app.load_buttons()
         CornerBox:
             id: pops
-            size: 250, len(self.children)*50
+            size: 400, len(self.children)*50
             pos: 0, self.parent.height - self.height
             canvas:
                 Color:
@@ -79,28 +79,44 @@
                     text: 'Babies:'
                 CountLabel:
                     id: babies_count
-                    text: str(app.stats['pops']['babies'])
+                    text: str(app.stats['pops']['babies']['count'])
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: babies_fill
+                        size: app.stats['pops']['babies']['approval'], self.parent.height
             CornerItemBox:
                 id: children
                 Label:
                     text: 'Children:'
                 CountLabel:
                     id: children_count
-                    text: str(app.stats['pops']['children'])
+                    text: str(app.stats['pops']['children']['count'])
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: children_fill
+                        size: app.stats['pops']['children']['approval'], self.parent.height
             CornerItemBox:
                 id: teens
                 Label:
                     text: 'Teens:'
                 CountLabel:
                     id: teens_count
-                    text: str(app.stats['pops']['teens'])
+                    text: str(app.stats['pops']['teens']['count'])
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: teens_fill
+                        size: app.stats['pops']['teens']['approval'], self.parent.height
             CornerItemBox:
                 id: settlers
                 Label:
                     text: 'Settlers:'
                 CountLabel:
                     id: settlers_count
-                    text: str(app.stats['pops']['settlers'])
+                    text: str(app.stats['pops']['settlers']['count'])
+                IdeologyMeter:
+                    IdeologyFill:
+                        id: settlers_fill
+                        size: app.stats['pops']['settlers']['approval'], self.parent.height
 
         SideBox:
             id: status
@@ -158,52 +174,6 @@
                     id: greenhouse
                     text: str(app.stats['base_modules']['greenhouse'])
 
-        CornerBox:
-            id: ideologies
-            size: 400, len(self.children)*50
-            pos: 0, 0
-            canvas:
-                Color:
-                    rgba: (200,0,0,0.5)
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: [30,30,0,0]
-            CornerItemBox:
-                Label:
-                    text: 'Anarchists:'
-                IdeologyMeter:
-                    IdeologyFill:
-                        id: anarchists_fill
-                        size: app.stats['ideologies']['anarchists'], self.parent.height
-            CornerItemBox:
-                Label:
-                    text: 'Authoritarians:'
-                IdeologyMeter:
-                    IdeologyFill:
-                        id: authoritarians_fill
-                        size: app.stats['ideologies']['authoritarians'], self.parent.height
-            CornerItemBox:
-                Label:
-                    text: 'Communitarians:'
-                IdeologyMeter:
-                    IdeologyFill:
-                        id: communitarians_fill
-                        size: app.stats['ideologies']['communitarians'], self.parent.height
-            CornerItemBox:
-                Label:
-                    text: 'Communists:'
-                IdeologyMeter:
-                    IdeologyFill:
-                        id: communists_fill
-                        size: app.stats['ideologies']['communists'], self.parent.height
-            CornerItemBox:
-                Label:
-                    text: 'Conservatives:'
-                IdeologyMeter:
-                    IdeologyFill:
-                        id: conservatives_fill
-                        size: app.stats['ideologies']['conservatives'], self.parent.height
 
 
 <LoadingScreen>:
