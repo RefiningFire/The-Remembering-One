@@ -88,44 +88,44 @@
                     text: 'Babies:'
                 CountLabel:
                     id: babies_count
-                    text: str(app.stats['pops']['babies']['count'])
+                    text: str(app.stats['babies_count'])
                 IdeologyMeter:
                     IdeologyFill:
                         id: babies_fill
-                        size: app.stats['pops']['babies']['approval'], self.parent.height
+                        size: app.stats['babies_approval'], self.parent.height
             CornerItemBox:
                 id: children
                 Label:
                     text: 'Children:'
                 CountLabel:
                     id: children_count
-                    text: str(app.stats['pops']['children']['count'])
+                    text: str(app.stats['children_count'])
                 IdeologyMeter:
                     IdeologyFill:
                         id: children_fill
-                        size: app.stats['pops']['children']['approval'], self.parent.height
+                        size: app.stats['children_approval'], self.parent.height
             CornerItemBox:
                 id: teens
                 Label:
                     text: 'Teens:'
                 CountLabel:
                     id: teens_count
-                    text: str(app.stats['pops']['teens']['count'])
+                    text: str(app.stats['teens_count'])
                 IdeologyMeter:
                     IdeologyFill:
                         id: teens_fill
-                        size: app.stats['pops']['teens']['approval'], self.parent.height
+                        size: app.stats['teens_approval'], self.parent.height
             CornerItemBox:
                 id: settlers
                 Label:
                     text: 'Settlers:'
                 CountLabel:
                     id: settlers_count
-                    text: str(app.stats['pops']['settlers']['count'])
+                    text: str(app.stats['settlers_count'])
                 IdeologyMeter:
                     IdeologyFill:
                         id: settlers_fill
-                        size: app.stats['pops']['settlers']['approval'], self.parent.height
+                        size: app.stats['settlers_approval'], self.parent.height
 
         SideBox:
             id: status
@@ -175,13 +175,13 @@
                     text: 'Habitation:'
                 CountLabel:
                     id: habitation
-                    text: str(app.stats['base_modules']['habitation'])
+                    text: str(app.stats['habitation_modules'])
             CornerItemBox:
                 Label:
                     text: 'Greenhouse:'
                 CountLabel:
                     id: greenhouse
-                    text: str(app.stats['base_modules']['greenhouse'])
+                    text: str(app.stats['greenhouse_modules'])
 
 
 
