@@ -55,20 +55,29 @@
     FloatLayout:
         BoxLayout:
             size_hint: None, None
-            size: 100, 100
-            pos: self.parent.width/2,self.parent.height/2
+            size: 200, 100
+            pos: self.parent.width/2-100,self.parent.height - 250
             Button:
                 text: 'Increase'
                 on_press:
                     root.increase()
+                    root.draw_card()
                     app.load_buttons()
+        BoxLayout:
+            size_hint: None, None
+            size: 200, 100
+            pos: self.parent.width/2 + 200,self.parent.height - 250
+            Button:
+                text: 'Discard'
+                on_press:
+                    root.discard_card()
         CornerBox:
             id: pops
             size: 400, len(self.children)*50
             pos: 0, self.parent.height - self.height
             canvas:
                 Color:
-                    rgba: (200,0,0,0.5)
+                    rgba: (100,100,100,0.5)
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -124,7 +133,7 @@
             pos: self.parent.width/2-self.width/2, self.parent.height-self.height
             canvas:
                 Color:
-                    rgba: (200,0,0,0.5)
+                    rgba: (100,100,100,0.5)
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -156,7 +165,7 @@
             pos: self.parent.width-self.width, self.parent.height-self.height
             canvas:
                 Color:
-                    rgba: (200,0,0,0.5)
+                    rgba: (100,100,100,0.5)
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos

@@ -7,10 +7,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 
+from kivy.graphics import Color, Rectangle
+
 from kivy.core.window import Window
 Window.fullscreen = 'auto'
 
-import decks.starting
+import decks.starting as starting
 
 class MainScreen(Screen):
     def increase(self):
@@ -18,16 +20,94 @@ class MainScreen(Screen):
         app.stats['pops']['teens']['count'] += 4
         app.stats['pops']['children']['count'] += 3
         app.stats['pops']['babies']['count'] += 2
-        app.stats['base_modules']['habitation'] += 1
-        app.stats['base_modules']['greenhouse'] -= 1
-        app.stats['planet_habitability'] += 7
-        app.stats['year'] += 1
-        app.stats['day'] += 1
 
         app.stats['pops']['settlers']['approval'] += 5
         app.stats['pops']['teens']['approval'] += 4
         app.stats['pops']['children']['approval'] += 3
         app.stats['pops']['babies']['approval'] += 2
+
+        app.stats['planet_habitability'] += 7
+        app.stats['year'] += 1
+        app.stats['day'] += 1
+
+        app.stats['base_modules']['habitation'] += 1
+        app.stats['base_modules']['greenhouse'] -= 1
+
+    def draw_card(self):
+        self.__parent = app.sm.get_screen('main').ids.pops.parent
+
+        self.__card_width = 900
+        self.__card_height = 1200
+
+        self.current_card = BoxLayout(
+                        orientation='vertical',
+                        spacing=10,
+                        size_hint=(None,None),
+                        width=self.__card_width,
+                        height=self.__card_height,
+                        pos=(self.__parent.width/2-self.__card_width/2,self.__parent.height/2-self.__card_height/2)
+        )
+        self.current_card.canvas.add(Color(1,1,1,.5))
+        self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
+
+        self.title = Label(
+                        text=starting.deck['SD001']['name']
+        )
+        self.text = Label(
+                        text=starting.deck['SD001']['text']
+        )
+
+        self.current_card.add_widget(self.title)
+        self.current_card.add_widget(self.text)
+
+        self.__options = starting.deck['SD001']['options']
+
+
+        for each in range(len(starting.deck['SD001']['options'])):
+            self.__current_opt = 'opt' + str(each+1)
+
+            self.option_layout = BoxLayout(
+                                    orientation='horizontal'
+            )
+            self.option_btn = Button(
+                                    text=self.__options[self.__current_opt]['text'],
+                                    size=self.option_layout.size
+            )
+            self.option_cost_layout = BoxLayout(
+                                    orientation='vertical'
+            )
+            self.option_reward_layout = BoxLayout(
+                                    orientation='vertical'
+            )
+
+            for i in range(len(self.__options[self.__current_opt]['rsrc_cost'])):
+                self.option_cost = Label(
+                                        text=self.__options[self.__current_opt]['rsrc_cost'][i] + ': ' + str(self.__options[self.__current_opt]['rsrc_amt'][i])
+                )
+                self.option_cost_layout.add_widget(self.option_cost)
+            self.option_layout.add_widget(self.option_cost_layout)
+
+
+            self.option_layout.add_widget(self.option_btn)
+
+
+            for i in range(len(self.__options[self.__current_opt]['apprvl'])):
+                self.option_apprvl = Label(
+                                        text=self.__options[self.__current_opt]['apprvl'][i] + ': ' + str(self.__options[self.__current_opt]['apprvl_amt'][i])
+            )
+                self.option_reward_layout.add_widget(self.option_apprvl)
+            self.option_layout.add_widget(self.option_reward_layout)
+
+            self.current_card.add_widget(self.option_layout)
+
+        self.__parent.add_widget(self.current_card)
+
+    def discard_card(self):
+        self.__parent = app.sm.get_screen('main').ids.pops.parent
+
+        self.__parent.remove_widget(self.current_card)
+
+
 
 class LoadingScreen(Screen):
     pass
@@ -47,7 +127,7 @@ class TheRememberingOneApp(App):
                     'approval':0},
                 'settlers':{
                     'count':1000,
-                    'approval':0},
+                    'approval':50},
             },
             'base_modules':{
                 'habitation':100,
