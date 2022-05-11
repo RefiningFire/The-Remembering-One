@@ -34,11 +34,18 @@ class MainScreen(Screen):
         app.stats['base_modules']['greenhouse'] -= 1
 
     def draw_card(self):
+        # Short link to the main screen Float Layout
         self.__parent = app.sm.get_screen('main').ids.pops.parent
 
+        # Short link to the starting deck options.
+        self.__options = starting.deck['SD001']['options']
+
+
+        # Default card dimensions.
         self.__card_width = 900
         self.__card_height = 1200
 
+        # Base of the Card.
         self.current_card = BoxLayout(
                         orientation='vertical',
                         spacing=10,
@@ -47,64 +54,74 @@ class MainScreen(Screen):
                         height=self.__card_height,
                         pos=(self.__parent.width/2-self.__card_width/2,self.__parent.height/2-self.__card_height/2)
         )
+
+        # Card canvas.
         self.current_card.canvas.add(Color(1,1,1,.5))
         self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
 
-        self.title = Label(
-                        text=starting.deck['SD001']['name']
-        )
-        self.text = Label(
-                        text=starting.deck['SD001']['text']
-        )
+        # Card Title and Text.
+        self.title = Label(text=starting.deck['SD001']['name'])
+        self.text = Label(text=starting.deck['SD001']['text'])
 
+        # Add Title and Text to card base.
         self.current_card.add_widget(self.title)
         self.current_card.add_widget(self.text)
 
-        self.__options = starting.deck['SD001']['options']
-
-
+        # Iterate over each option in the card.
         for each in range(len(starting.deck['SD001']['options'])):
+            # Short link to the current option. (Opt1, opt2, etc.)
             self.__current_opt = 'opt' + str(each+1)
 
-            self.option_layout = BoxLayout(
-                                    orientation='horizontal'
-            )
-            self.option_btn = Button(
-                                    text=self.__options[self.__current_opt]['text'],
-                                    size=self.option_layout.size
-            )
-            self.option_cost_layout = BoxLayout(
-                                    orientation='vertical'
-            )
-            self.option_reward_layout = BoxLayout(
-                                    orientation='vertical'
-            )
+            # The base layout of the layout.
+            self.option_layout = BoxLayout(orientation='horizontal')
 
-            for i in range(len(self.__options[self.__current_opt]['rsrc_cost'])):
+            # The button that selects the current option.
+            self.option_btn = Button(
+                                text=self.__options[self.__current_opt]['text'],
+                                size=self.option_layout.size)
+
+            # The cost and reward layouts.
+            self.option_cost_layout = BoxLayout(orientation='vertical')
+            self.option_reward_layout = BoxLayout(orientation='vertical')
+
+            # Iterate over each resource cost.
+            for i in range(len(self.__options[self.__current_opt]['cost_type'])):
+                # Add a label for each cost.
                 self.option_cost = Label(
-                                        text=self.__options[self.__current_opt]['rsrc_cost'][i] + ': ' + str(self.__options[self.__current_opt]['rsrc_amt'][i])
-                )
+                        text=self.__options[self.__current_opt]['cost_type'][i] + ': ' + str(self.__options[self.__current_opt]['cost_amt'][i]))
+
+                # Add the label to the cost layout.
                 self.option_cost_layout.add_widget(self.option_cost)
+
+            # Add all the cost layout to the option layout.
             self.option_layout.add_widget(self.option_cost_layout)
 
-
+            # Add the option button to the option layout.
             self.option_layout.add_widget(self.option_btn)
 
+            # Iterate over each reward.
+            for i in range(len(self.__options[self.__current_opt]['reward'])):
+                # Add a label for each reward.
+                self.option_reward = Label(
+                            text=self.__options[self.__current_opt]['reward'][i] + ': ' + str(self.__options[self.__current_opt]['reward_amt'][i]))
 
-            for i in range(len(self.__options[self.__current_opt]['apprvl'])):
-                self.option_apprvl = Label(
-                                        text=self.__options[self.__current_opt]['apprvl'][i] + ': ' + str(self.__options[self.__current_opt]['apprvl_amt'][i])
-            )
-                self.option_reward_layout.add_widget(self.option_apprvl)
+                # Add the label to the reward layout.
+                self.option_reward_layout.add_widget(self.option_reward)
+
+            # Add the reward layout to the option layout.
             self.option_layout.add_widget(self.option_reward_layout)
 
+            # Add the option layout to the card base.
             self.current_card.add_widget(self.option_layout)
 
+        # Once all the layout of the card is done, add it to the Float Layout of the main screen.
         self.__parent.add_widget(self.current_card)
 
     def discard_card(self):
+        # Short link to the main screen Float Layout.
         self.__parent = app.sm.get_screen('main').ids.pops.parent
 
+        # Remove the existing current card from the Float Layout.
         self.__parent.remove_widget(self.current_card)
 
 
