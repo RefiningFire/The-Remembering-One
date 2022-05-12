@@ -12,11 +12,24 @@ from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
 Window.fullscreen = 'auto'
 
+import random
 import decks.starting
+import decks.summer
+import decks.test
 
 starting_deck = decks.starting.deck.copy()
+test_deck = decks.test.deck.copy()
 
-main_deck = starting_deck.copy()
+main_deck = test_deck.copy()
+
+
+all_unused_cards = decks.starting.deck.copy() | decks.summer.deck.copy()
+
+# Create an empty dictionary that will hold all_used_cards.
+all_used_cards = {}
+
+
+
 
 '''
 test = list(main_deck.items())
@@ -43,14 +56,26 @@ class MainScreen(Screen):
         app.stats['greenhouse_modules'] -= 1
 
     def draw_card(self):
-        # Drawn card id.
-        self.card_id = 'SD001'
+        if len(main_deck) == 0:
+            print('zero!')
+        # Set iter and selected card variables
+        self.__selected_card = random.randint(0,len(main_deck)-1)
+        self.__card_draw_iter = 0
+
+        print(self.__selected_card)
+        # Iterate through the main deck until the randomly selected number is found.
+        for card in main_deck:
+            if self.__card_draw_iter == self.__selected_card:
+                # Set drawn card id.
+                app.current_card_id = card
+                break
+            self.__card_draw_iter += 1
 
         # Short link to the main screen Float Layout
         self.__parent = app.sm.get_screen('main').ids.pops.parent
 
         # Short link to the card's options.
-        self.__options = main_deck[self.card_id]['options']
+        self.__options = main_deck[app.current_card_id]['options']
 
         # Default card dimensions.
         self.__card_width = 900
@@ -68,15 +93,15 @@ class MainScreen(Screen):
         self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
 
         # Card Title and Text.
-        self.title = Label(text=main_deck[self.card_id]['name'],font_size=80,size_hint=(1,.3))
-        self.text = Label(text=main_deck[self.card_id]['text'])
+        self.title = Label(text=main_deck[app.current_card_id]['name'],font_size=80,size_hint=(1,.3))
+        self.text = Label(text=main_deck[app.current_card_id]['text'])
 
         # Add Title and Text to card base.
         self.current_card.add_widget(self.title)
         self.current_card.add_widget(self.text)
 
         # Iterate over each option in the card.
-        for each in range(len(main_deck[self.card_id]['options'])):
+        for each in range(len(main_deck[app.current_card_id]['options'])):
             # Short link to the current option. (Opt1, opt2, etc.)
             self.__cur_opt = 'opt' + str(each+1)
 
@@ -100,6 +125,7 @@ class MainScreen(Screen):
             self.cur_opt_cost_amt = []
             self.cur_opt_rwd_type = []
             self.cur_opt_rwd_amt = []
+            self.cur_opt_new_cards = []
 
             # Iterate over each resource cost.
             for i in range(len(self.__options[self.__cur_opt]['cost_type'])):
@@ -136,7 +162,7 @@ class MainScreen(Screen):
 
                 # The current reward type.
                 self.__rwd_type = self.__options[self.__cur_opt]['rwd_type'][i]
-                # The current option amount.
+                # The current reward amount.
                 self.__rwd_amt = self.__options[self.__cur_opt]['rwd_amt'][i]
 
                 # Save the reward type and amt to the button so they can change.
@@ -150,16 +176,26 @@ class MainScreen(Screen):
                 # Add the label to the reward layout.
                 self.option_reward_layout.add_widget(self.option_reward)
 
+            for i in range(len(self.__options[self.__cur_opt]['new_cards'])):
+                # The current option's new card.
+                self.__new_card = self.__options[self.__cur_opt]['new_cards'][i]
+
+                # Save the new cards to the button so it can change.
+                self.cur_opt_new_cards.append(self.__new_card)
+
             # Set types and amounts of reward for each option.
             if each == 0:
                 self.opt1_rwd_types = self.cur_opt_rwd_type
                 self.opt1_rwd_amt = self.cur_opt_rwd_amt
+                self.opt1_new_cards = self.cur_opt_new_cards
             elif each == 1:
                 self.opt2_rwd_types = self.cur_opt_rwd_type
                 self.opt2_rwd_amt = self.cur_opt_rwd_amt
+                self.opt2_new_cards = self.cur_opt_new_cards
             elif each == 2:
                 self.opt3_rwd_types = self.cur_opt_rwd_type
                 self.opt3_rwd_amt = self.cur_opt_rwd_amt
+                self.opt3_new_cards = self.cur_opt_new_cards
 
 
             # Bind the cost and rewards to the option button.
@@ -186,9 +222,6 @@ class MainScreen(Screen):
         # Once all the layout of the card is done, add it to the Float Layout of the main screen.
         self.__parent.add_widget(self.current_card)
 
-        # Remove this card from the deck.
-        main_deck.pop(self.card_id)
-
     def discard_card(self):
         # Short link to the main screen Float Layout.
         self.__parent = app.sm.get_screen('main').ids.pops.parent
@@ -196,9 +229,18 @@ class MainScreen(Screen):
         # Remove the existing current card from the Float Layout.
         self.__parent.remove_widget(self.current_card)
 
+        # Copy this card to the all_used_cards pool.
+        all_used_cards[app.current_card_id] = main_deck[app.current_card_id]
+
+        # Remove this card from the main deck.
+        main_deck.pop(app.current_card_id)
+
     def add_card(self,new_id):
-        main_deck[new_id] = starting_deck[new_id]
-        print(main_deck)
+        # Add new card to main_deck.
+        main_deck[new_id] = all_unused_cards[new_id]
+
+        # Remove the new card from the all_unused_cards pool.
+        all_unused_cards.pop(new_id)
 
 
     # Each options selection iterates through the items in the options button and updates the stats.
@@ -207,15 +249,17 @@ class MainScreen(Screen):
             app.stats[self.opt1_cost_types[item]] += self.opt1_cost_amt[item]
         for item in range(len(self.opt1_rwd_types)):
             app.stats[self.opt1_rwd_types[item]] += self.opt1_rwd_amt[item]
+        for card in self.opt1_new_cards:
+            self.add_card(card)
         app.load_buttons()
         self.discard_card()
-        self.add_card('SD001')
-
     def opt2_select(self,instance):
         for item in range(len(self.opt2_cost_types)):
             app.stats[self.opt2_cost_types[item]] += self.opt2_cost_amt[item]
         for item in range(len(self.opt2_rwd_types)):
             app.stats[self.opt2_rwd_types[item]] += self.opt2_rwd_amt[item]
+        for card in self.opt2_new_cards:
+            self.add_card(card)
         app.load_buttons()
         self.discard_card()
     def opt3_select(self,instance):
@@ -223,6 +267,8 @@ class MainScreen(Screen):
             app.stats[self.opt3_cost_types[item]] += self.opt3_cost_amt[item]
         for item in range(len(self.opt3_rwd_types)):
             app.stats[self.opt3_rwd_types[item]] += self.opt3_rwd_amt[item]
+        for card in self.opt3_new_cards:
+            self.add_card(card)
         app.load_buttons()
         self.discard_card()
 
@@ -247,6 +293,8 @@ class TheRememberingOneApp(App):
             'year':0,
             'day':0
         }
+
+        app.current_card_id = ''
 
         self.sm = ScreenManager(transition=SlideTransition())
         self.sm.add_widget(MainScreen(name='main'))
