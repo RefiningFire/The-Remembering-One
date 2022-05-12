@@ -12,7 +12,16 @@ from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
 Window.fullscreen = 'auto'
 
-import decks.starting as starting
+import decks.starting
+
+starting_deck = decks.starting.deck.copy()
+
+main_deck = starting_deck.copy()
+
+'''
+test = list(main_deck.items())
+print(test[0][1])
+'''
 
 class MainScreen(Screen):
     def increase(self):
@@ -34,12 +43,14 @@ class MainScreen(Screen):
         app.stats['greenhouse_modules'] -= 1
 
     def draw_card(self):
+        # Drawn card id.
+        self.card_id = 'SD001'
+
         # Short link to the main screen Float Layout
         self.__parent = app.sm.get_screen('main').ids.pops.parent
 
-        # Short link to the starting deck options.
-        self.__options = starting.deck['SD001']['options']
-
+        # Short link to the card's options.
+        self.__options = main_deck[self.card_id]['options']
 
         # Default card dimensions.
         self.__card_width = 900
@@ -57,15 +68,15 @@ class MainScreen(Screen):
         self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
 
         # Card Title and Text.
-        self.title = Label(text=starting.deck['SD001']['name'],font_size=80,size_hint=(1,.3))
-        self.text = Label(text=starting.deck['SD001']['text'])
+        self.title = Label(text=main_deck[self.card_id]['name'],font_size=80,size_hint=(1,.3))
+        self.text = Label(text=main_deck[self.card_id]['text'])
 
         # Add Title and Text to card base.
         self.current_card.add_widget(self.title)
         self.current_card.add_widget(self.text)
 
         # Iterate over each option in the card.
-        for each in range(len(starting.deck['SD001']['options'])):
+        for each in range(len(main_deck[self.card_id]['options'])):
             # Short link to the current option. (Opt1, opt2, etc.)
             self.__cur_opt = 'opt' + str(each+1)
 
@@ -175,12 +186,20 @@ class MainScreen(Screen):
         # Once all the layout of the card is done, add it to the Float Layout of the main screen.
         self.__parent.add_widget(self.current_card)
 
+        # Remove this card from the deck.
+        main_deck.pop(self.card_id)
+
     def discard_card(self):
         # Short link to the main screen Float Layout.
         self.__parent = app.sm.get_screen('main').ids.pops.parent
 
         # Remove the existing current card from the Float Layout.
         self.__parent.remove_widget(self.current_card)
+
+    def add_card(self,new_id):
+        main_deck[new_id] = starting_deck[new_id]
+        print(main_deck)
+
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
@@ -189,18 +208,23 @@ class MainScreen(Screen):
         for item in range(len(self.opt1_rwd_types)):
             app.stats[self.opt1_rwd_types[item]] += self.opt1_rwd_amt[item]
         app.load_buttons()
+        self.discard_card()
+        self.add_card('SD001')
+
     def opt2_select(self,instance):
         for item in range(len(self.opt2_cost_types)):
             app.stats[self.opt2_cost_types[item]] += self.opt2_cost_amt[item]
         for item in range(len(self.opt2_rwd_types)):
             app.stats[self.opt2_rwd_types[item]] += self.opt2_rwd_amt[item]
         app.load_buttons()
+        self.discard_card()
     def opt3_select(self,instance):
         for item in range(len(self.opt3_cost_types)):
             app.stats[self.opt3_cost_types[item]] += self.opt3_cost_amt[item]
         for item in range(len(self.opt3_rwd_types)):
             app.stats[self.opt3_rwd_types[item]] += self.opt3_rwd_amt[item]
         app.load_buttons()
+        self.discard_card()
 
 
 class LoadingScreen(Screen):
