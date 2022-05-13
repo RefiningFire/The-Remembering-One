@@ -17,17 +17,16 @@ import decks.starting
 import decks.summer
 import decks.test
 
-starting_deck = decks.starting.deck.copy()
-test_deck = decks.test.deck.copy()
 
-main_deck = test_deck.copy()
+main_deck = decks.starting.deck.copy()
 
-
-all_unused_cards = decks.starting.deck.copy() | decks.summer.deck.copy()
+all_unused_cards = decks.test.deck.copy() | decks.summer.deck.copy()
 
 # Create an empty dictionary that will hold all_used_cards.
 all_used_cards = {}
 
+# Create the 'on deck' deck, where cards go once selected, but before actually added to the main deck.
+to_be_added = {}
 
 
 
@@ -57,7 +56,11 @@ class MainScreen(Screen):
 
     def draw_card(self):
         if len(main_deck) == 0:
-            print('zero!')
+            print('ZERO!')
+            print()
+            print()
+            print()
+            print()
         # Set iter and selected card variables
         self.__selected_card = random.randint(0,len(main_deck)-1)
         self.__card_draw_iter = 0
@@ -229,8 +232,10 @@ class MainScreen(Screen):
         # Remove the existing current card from the Float Layout.
         self.__parent.remove_widget(self.current_card)
 
-        # Copy this card to the all_used_cards pool.
-        all_used_cards[app.current_card_id] = main_deck[app.current_card_id]
+        # If the card is unique, remove it from play.
+        if main_deck[app.current_card_id]['unique'] == True:
+            # Copy this card to the all_used_cards pool.
+            all_used_cards[app.current_card_id] = main_deck[app.current_card_id]
 
         # Remove this card from the main deck.
         main_deck.pop(app.current_card_id)
@@ -239,9 +244,13 @@ class MainScreen(Screen):
         # Add new card to main_deck.
         main_deck[new_id] = all_unused_cards[new_id]
 
-        # Remove the new card from the all_unused_cards pool.
-        all_unused_cards.pop(new_id)
+        # If the card is unique, remove it from the all_unused_cards pool.
+        if main_deck[new_id]['options'] == True:
+            # Remove the new card from the all_unused_cards pool.
+            all_unused_cards.pop(new_id)
 
+        print(new_id)
+        print(all_unused_cards)
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):

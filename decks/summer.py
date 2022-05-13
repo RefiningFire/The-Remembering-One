@@ -2,6 +2,7 @@ deck = {
     'SUMMER001':{
             'name':'The first Summer event',
             'text':'This is the text of the first Summer event.',
+            'unique':True,
             'options':{
                 'opt1':{
                     'text':'Option 1','new_cards':['SD002','SD003'],
