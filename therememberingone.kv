@@ -161,7 +161,7 @@
 
         CornerBox:
             id: modules
-            size: 350, len(self.children)*50
+            size: 400, len(self.children)*50
             pos: self.parent.width-self.width, self.parent.height-self.height
             canvas:
                 Color:
@@ -172,10 +172,16 @@
                     radius: [0,0,0,30]
             CornerItemBox:
                 Label:
-                    text: 'Habitation:'
+                    text: 'Habitat Modules:'
                 CountLabel:
-                    id: habitation
-                    text: str(app.stats['habitation_modules'])
+                    id: habitat_modules
+                    text: str(app.stats['habitat_modules'])
+            CornerItemBox:
+                Label:
+                    text: 'Habitat Free Space:'
+                CountLabel:
+                    id: habitat_free_space
+                    text: str(app.stats['habitat_free_space'])
             CornerItemBox:
                 Label:
                     text: 'Greenhouse:'
