@@ -62,7 +62,7 @@
                 on_press:
                     root.increase()
                     root.draw_card()
-                    app.load_buttons()
+                    root.load_buttons()
         BoxLayout:
             size_hint: None, None
             size: 200, 100
@@ -88,44 +88,44 @@
                     text: 'Babies:'
                 CountLabel:
                     id: babies_count
-                    text: str(app.stats['babies_count'])
+                    text: str(app.start_stats['babies_count'])
                 MeterFrame:
                     MeterFill:
                         id: babies_fill
-                        size: app.stats['babies_approval'], self.parent.height
+                        size: app.start_stats['babies_approval'], self.parent.height
             CornerItemBox:
                 id: children
                 Label:
                     text: 'Children:'
                 CountLabel:
                     id: children_count
-                    text: str(app.stats['children_count'])
+                    text: str(app.start_stats['children_count'])
                 MeterFrame:
                     MeterFill:
                         id: children_fill
-                        size: app.stats['children_approval'], self.parent.height
+                        size: app.start_stats['children_approval'], self.parent.height
             CornerItemBox:
                 id: teens
                 Label:
                     text: 'Teens:'
                 CountLabel:
                     id: teens_count
-                    text: str(app.stats['teens_count'])
+                    text: str(app.start_stats['teens_count'])
                 MeterFrame:
                     MeterFill:
                         id: teens_fill
-                        size: app.stats['teens_approval'], self.parent.height
+                        size: app.start_stats['teens_approval'], self.parent.height
             CornerItemBox:
                 id: settlers
                 Label:
                     text: 'Settlers:'
                 CountLabel:
                     id: settlers_count
-                    text: str(app.stats['settlers_count'])
+                    text: str(app.start_stats['settlers_count'])
                 MeterFrame:
                     MeterFill:
                         id: settlers_fill
-                        size: app.stats['settlers_approval'], self.parent.height
+                        size: app.start_stats['settlers_approval'], self.parent.height
 
         SideBox:
             id: status
@@ -145,19 +145,19 @@
                     text: 'Planet Habitability'
                 Label:
                     id: planet_habitability
-                    text: str(app.stats['planet_habitability'])
+                    text: str(app.start_stats['planet_habitability']) + '%'
             SideItemBox:
                 Label:
                     text: 'Year'
                 Label:
                     id: year
-                    text: str(app.stats['year'])
+                    text: str(app.start_stats['year'])
             SideItemBox:
                 Label:
                     text: 'Day'
                 Label:
                     id: day
-                    text: str(app.stats['day'])
+                    text: str(app.start_stats['day'])
 
         CornerBox:
             id: modules
@@ -175,21 +175,21 @@
                     text: 'Habitat Modules:'
                 CountLabel:
                     id: habitat_modules
-                    text: str(app.stats['habitat_space_used']) + '/' + str(app.stats['habitat_modules'])
+                    text: str(app.start_stats['habitat_space_used']) + '/' + str(app.start_stats['habitat_modules'])
                 MeterFrame:
                     MeterFill:
                         id: habitat_fill
-                        size: app.stats['habitat_condition'], self.parent.height
+                        size: app.start_stats['habitat_condition'], self.parent.height
             CornerItemBox:
                 Label:
                     text: 'Greenhouse Modules:'
                 CountLabel:
                     id: greenhouse_modules
-                    text: str(app.stats['greenhouse_space_used']) + '/' + str(app.stats['greenhouse_modules'])
+                    text: str(app.start_stats['greenhouse_space_used']) + '/' + str(app.start_stats['greenhouse_modules'])
                 MeterFrame:
                     MeterFill:
                         id: greenhouse_fill
-                        size: app.stats['greenhouse_condition'], self.parent.height
+                        size: app.start_stats['greenhouse_condition'], self.parent.height
 
 
 
