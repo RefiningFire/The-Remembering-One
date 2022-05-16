@@ -13,6 +13,8 @@ from kivy.core.window import Window
 Window.fullscreen = 'auto'
 
 import random
+import math
+
 import decks.starting
 import decks.summer
 import decks.test
@@ -54,11 +56,12 @@ class MainScreen(Screen):
 
         app.stats['habitat_modules'] += 0
 
-        # Habitat free space is the number of habitats times 10, minus all of the people in the colony.
-        app.stats['habitat_free_space']=app.stats['habitat_modules']*10-                                          (app.stats['settlers_count'] +
-                                            app.stats['teens_count'] + app.stats['children_count'] +     app.stats['babies_count'])
+        # Habitat free space is the number of pops divided by 10, rounded up.
+        app.stats['habitat_space_used']=math.ceil((
+                            app.stats['settlers_count'] +
+                            app.stats['teens_count'] + app.stats['children_count'] + app.stats['babies_count']) / 10)
 
-        app.stats['greenhouse_modules'] -= 1
+        app.stats['greenhouse_space_used'] -= 1
 
     def draw_card(self):
         # Set iter and selected card variables
@@ -325,8 +328,11 @@ class TheRememberingOneApp(App):
             'settlers_count':100,
             'settlers_approval':50,
             'habitat_modules':20,
-            'habitat_free_space':100, # 10 space per module.
+            'habitat_condition':100,
+            'habitat_space_used':10,
             'greenhouse_modules':10,
+            'greenhouse_condition':100,
+            'greenhouse_space_used':10,
             'planet_habitability':0,
             'year':0,
             'day':0
@@ -357,10 +363,11 @@ class TheRememberingOneApp(App):
         self.__ids.year.text = str(app.stats['year'])
         self.__ids.day.text = str(app.stats['day'])
 
-        self.__ids.habitat_modules.text = str(app.stats['habitat_modules'])
-        self.__ids.habitat_free_space.text = str(app.stats['habitat_free_space'])
-        self.__ids.greenhouse.text = str(app.stats['greenhouse_modules'])
+        self.__ids.habitat_modules.text = str(app.stats['habitat_space_used']) + '/' + str(app.stats['habitat_modules'])
+        self.__ids.greenhouse_modules.text = str(app.stats['greenhouse_space_used']) + '/' + str(app.stats['greenhouse_modules'])
 
+        self.__ids.habitat_fill.size = (app.stats['habitat_condition'],self.__ids.habitat_fill.parent.height)
+        self.__ids.greenhouse_fill.size = (app.stats['greenhouse_condition'],self.__ids.greenhouse_fill.parent.height)
 
 if __name__ == '__main__':
     app = TheRememberingOneApp()

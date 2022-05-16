@@ -25,7 +25,7 @@
     size_hint: None, None
     size: 120, self.parent.height - self.parent.parent.spacing
 
-<IdeologyMeter@BoxLayout>:
+<MeterFrame@BoxLayout>:
     orientation: 'horizontal'
     padding: [0]
     spacing: 0
@@ -39,7 +39,7 @@
             pos: self.pos
             radius: [10,10,10,10]
 
-<IdeologyFill@Label>:
+<MeterFill@Label>:
     size_hint: None, None
     pos: 0,0
     canvas:
@@ -89,8 +89,8 @@
                 CountLabel:
                     id: babies_count
                     text: str(app.stats['babies_count'])
-                IdeologyMeter:
-                    IdeologyFill:
+                MeterFrame:
+                    MeterFill:
                         id: babies_fill
                         size: app.stats['babies_approval'], self.parent.height
             CornerItemBox:
@@ -100,8 +100,8 @@
                 CountLabel:
                     id: children_count
                     text: str(app.stats['children_count'])
-                IdeologyMeter:
-                    IdeologyFill:
+                MeterFrame:
+                    MeterFill:
                         id: children_fill
                         size: app.stats['children_approval'], self.parent.height
             CornerItemBox:
@@ -111,8 +111,8 @@
                 CountLabel:
                     id: teens_count
                     text: str(app.stats['teens_count'])
-                IdeologyMeter:
-                    IdeologyFill:
+                MeterFrame:
+                    MeterFill:
                         id: teens_fill
                         size: app.stats['teens_approval'], self.parent.height
             CornerItemBox:
@@ -122,8 +122,8 @@
                 CountLabel:
                     id: settlers_count
                     text: str(app.stats['settlers_count'])
-                IdeologyMeter:
-                    IdeologyFill:
+                MeterFrame:
+                    MeterFill:
                         id: settlers_fill
                         size: app.stats['settlers_approval'], self.parent.height
 
@@ -161,7 +161,7 @@
 
         CornerBox:
             id: modules
-            size: 400, len(self.children)*50
+            size: 550, len(self.children)*50
             pos: self.parent.width-self.width, self.parent.height-self.height
             canvas:
                 Color:
@@ -175,19 +175,21 @@
                     text: 'Habitat Modules:'
                 CountLabel:
                     id: habitat_modules
-                    text: str(app.stats['habitat_modules'])
+                    text: str(app.stats['habitat_space_used']) + '/' + str(app.stats['habitat_modules'])
+                MeterFrame:
+                    MeterFill:
+                        id: habitat_fill
+                        size: app.stats['habitat_condition'], self.parent.height
             CornerItemBox:
                 Label:
-                    text: 'Habitat Free Space:'
+                    text: 'Greenhouse Modules:'
                 CountLabel:
-                    id: habitat_free_space
-                    text: str(app.stats['habitat_free_space'])
-            CornerItemBox:
-                Label:
-                    text: 'Greenhouse:'
-                CountLabel:
-                    id: greenhouse
-                    text: str(app.stats['greenhouse_modules'])
+                    id: greenhouse_modules
+                    text: str(app.stats['greenhouse_space_used']) + '/' + str(app.stats['greenhouse_modules'])
+                MeterFrame:
+                    MeterFill:
+                        id: greenhouse_fill
+                        size: app.stats['greenhouse_condition'], self.parent.height
 
 
 
