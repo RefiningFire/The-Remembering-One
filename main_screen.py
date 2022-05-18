@@ -36,6 +36,8 @@ class MainScreen(Screen):
 
         stats['greenhouse_space_used'] -= 1
 
+        print(galaxy_stats[1,0,0,3]) # Planet 1, x 0, y 0, item 3
+
     def draw_card(self):
         # Set iter and selected card variables
         self.__selected_card = random.randint(0,len(main_deck)-1)
@@ -237,23 +239,20 @@ class MainScreen(Screen):
 
     def add_card(self,new_id):
         self.__cards_to_be_added = []
+
+        # Search for the new_id in the unused cards.
         for card in all_unused_cards:
             if new_id in card:
                 self.__cards_to_be_added.append(card)
-
-        print(self.__cards_to_be_added)
 
         for card in self.__cards_to_be_added:
             # Add new card to main_deck.
             main_deck[card] = all_unused_cards[card]
 
-        for card in main_deck:
-            print(card)
-
-        # If the card is unique, remove it from the all_unused_cards pool.
-        if main_deck[new_id]['options'] == True:
-            # Remove the new card from the all_unused_cards pool.
-            all_unused_cards.pop(new_id)
+            # If the card is unique, remove it from the all_unused_cards pool.
+            if main_deck[card]['unique'] == True:
+                # Remove the new card from the all_unused_cards pool.
+                all_unused_cards.pop(card)
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
