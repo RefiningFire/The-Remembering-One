@@ -62,35 +62,72 @@ def stats_gen():
                 __sxse = -1
                 __exse = -1
 
+                # West Regions.
                 if __x >= 1:
                     __west_1 = region - 1
                     if __x >= 2:
                         __west_2 = region - 2
 
+                # South Regions.
                 if __y >= 1:
                     __south_1 = region - __x_cap
                     if __y >= 2:
                         __south_2 = region - (__x_cap * 2)
 
+                # Southwest Regions.
                 if __x >= 1 and __y >= 1:
                     __sw_1 = region - __x_cap - 1
                     if __x >= 2 and __y >= 2:
                         __sw_2 = region - (__x_cap * 2) - 2
 
+                # East Regions.
                 if (__x + 2) >= __x_cap:
                     __east_2 = region - (__x_cap - 2)
                     if (__x + 1) >= __x_cap:
                         __east_1 = region - (__x_cap - 1)
 
+                # Southeast Regions.
                 if __y >= 1:
-                    __se_1 = region - (__x_cap - 1)
-                    if __y >= 2:
-                        __se_2 = region - ((__x_cap * 2) - 2)
+                    if (__x + 1) >= __x_cap:
+                        __se_1 = region - ((__x_cap * 2) - 1)
+                    else:
+                        __se_1 = region - (__x_cap - 1)
 
-                if (__x + 2) >= __x_cap and __y >= 2:
-                    __se_2 = region - ((__x_cap * 2) + (__x_cap - 2))
-                    if (__x + 1) >= __x_cap and __y >= 1:
-                        __se_1 = region - (__x_cap + (__x_cap - 1))
+                    if __y >= 2:
+                        if (__x + 2) >= __x_cap:
+                            __se_2 = region - ((__x_cap * 3) - 2)
+                        else:
+                            __se_2 = region - ((__x_cap * 2) - 2)
+
+                # West by Southwest region.
+                if __y >= 1:
+                    if __x >= 2:
+                        __wxsw = region - (__x_cap + 2)
+                    elif __y >= 2:
+                        __wxsw = region - 2
+
+                # South by Southwest region.
+                if __y >= 2:
+                    if __x >= 1:
+                        __sxsw = region - ((__x_cap * 2) + 1)
+                    elif __y >= 3:
+                        __sxsw = region - (__x_cap + 1)
+
+                # South by Southeast region.
+                if __y >= 2:
+                    if (__x + 1) >= __x_cap:
+                        __sxse = region - ((__x_cap * 3) - 1)
+                    else:
+                        __sxse = region - ((__x_cap * 2) - 1)
+
+                # East by Southeast region.
+                if __y >= 1:
+                    if (__x + 2) >= __x_cap:
+                        __exse = region - ((__x_cap * 2) - 2)
+                    else:
+                        __exse = region - (__x_cap - 2)
+
+
 
                 print(f'__y: {__y}')
                 print()
@@ -131,6 +168,18 @@ def stats_gen():
                 print(f'__se_2: {__se_2}')
                 print(__galaxy[sector,planet,__se_2,1])
                 print(__galaxy[sector,planet,__se_2,2])
+                print(f'__wxsw: {__wxsw}')
+                print(__galaxy[sector,planet,__wxsw,1])
+                print(__galaxy[sector,planet,__wxsw,2])
+                print(f'__sxsw: {__sxsw}')
+                print(__galaxy[sector,planet,__sxsw,1])
+                print(__galaxy[sector,planet,__sxsw,2])
+                print(f'__sxse: {__sxse}')
+                print(__galaxy[sector,planet,__sxse,1])
+                print(__galaxy[sector,planet,__sxse,2])
+                print(f'__exse: {__exse}')
+                print(__galaxy[sector,planet,__exse,1])
+                print(__galaxy[sector,planet,__exse,2])
 
                 print()
                 print()
