@@ -3,9 +3,9 @@ import numpy as np
 import random
 
 
-max_sectors = 2
-max_planets = 2
-max_circumference = 10 # Earth is ~ 250. Unit is 1000 miles.
+max_sectors = 6
+max_planets = 6
+max_circumference = 80 # Earth is ~ 250. Unit is 1000 miles.
 max_regions = max_circumference * (max_circumference//2)
 max_items = 5
 
@@ -47,146 +47,163 @@ def stats_gen():
                 __galaxy[sector,planet,region,1] = __x
                 __galaxy[sector,planet,region,2] = __y
 
-                __west_1 = -1
-                __west_2 = -1
-                __sw_1 = -1
-                __sw_2 = -1
-                __south_1 = -1
-                __south_2 = -1
-                __east_1 = -1
-                __east_2 = -1
-                __se_1 = -1
-                __se_2 = -1
-                __wxsw = -1
-                __sxsw = -1
-                __sxse = -1
-                __exse = -1
+
+                # 0 = West1         1 = West2       2 = South1      3 = South2
+                # 4 = Southwest1    5 = Southwest2  6 = East2       7 = East1
+                # 8 = Southeast1    9 = Southeast2  10 = West by SW
+                # 11=South by SW    12=South by SE  13=East by SE
+                __surrounding_regions = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 
                 # West Regions.
                 if __x >= 1:
-                    __west_1 = region - 1
+                    __surrounding_regions[0] = region - 1
                     if __x >= 2:
-                        __west_2 = region - 2
+                        __surrounding_regions[1] = region - 2
 
                 # South Regions.
                 if __y >= 1:
-                    __south_1 = region - __x_cap
+                    __surrounding_regions[2] = region - __x_cap
                     if __y >= 2:
-                        __south_2 = region - (__x_cap * 2)
+                        __surrounding_regions[3] = region - (__x_cap * 2)
 
                 # Southwest Regions.
-                if __x >= 1 and __y >= 1:
-                    __sw_1 = region - __x_cap - 1
-                    if __x >= 2 and __y >= 2:
-                        __sw_2 = region - (__x_cap * 2) - 2
+                if __y >= 1:
+                    if __x >= 1:
+                        __surrounding_regions[4] = region - __x_cap - 1
+                    else:
+                        __surrounding_regions[4] = region - 1
+
+                    if __y >= 2:
+                        if __x >= 2:
+                            __surrounding_regions[5] = region - (__x_cap * 2) - 2
+                        else:
+                            __surrounding_regions[5] = region - __x_cap - 2
 
                 # East Regions.
                 if (__x + 2) >= __x_cap:
-                    __east_2 = region - (__x_cap - 2)
+                    __surrounding_regions[6] = region - (__x_cap - 2)
                     if (__x + 1) >= __x_cap:
-                        __east_1 = region - (__x_cap - 1)
+                        __surrounding_regions[7] = region - (__x_cap - 1)
 
                 # Southeast Regions.
                 if __y >= 1:
                     if (__x + 1) >= __x_cap:
-                        __se_1 = region - ((__x_cap * 2) - 1)
+                        __surrounding_regions[8] = region - ((__x_cap * 2) - 1)
                     else:
-                        __se_1 = region - (__x_cap - 1)
+                        __surrounding_regions[8] = region - (__x_cap - 1)
 
                     if __y >= 2:
                         if (__x + 2) >= __x_cap:
-                            __se_2 = region - ((__x_cap * 3) - 2)
+                            __surrounding_regions[9] = region - ((__x_cap * 3) - 2)
                         else:
-                            __se_2 = region - ((__x_cap * 2) - 2)
+                            __surrounding_regions[9] = region - ((__x_cap * 2) - 2)
 
                 # West by Southwest region.
                 if __y >= 1:
                     if __x >= 2:
-                        __wxsw = region - (__x_cap + 2)
-                    elif __y >= 2:
-                        __wxsw = region - 2
+                        __surrounding_regions[10] = region - (__x_cap + 2)
+                    else:
+                        __surrounding_regions[10] = region - 2
 
                 # South by Southwest region.
                 if __y >= 2:
                     if __x >= 1:
-                        __sxsw = region - ((__x_cap * 2) + 1)
-                    elif __y >= 3:
-                        __sxsw = region - (__x_cap + 1)
+                        __surrounding_regions[11] = region - ((__x_cap * 2) + 1)
+                    else:
+                        __surrounding_regions[11] = region - (__x_cap + 1)
 
                 # South by Southeast region.
                 if __y >= 2:
                     if (__x + 1) >= __x_cap:
-                        __sxse = region - ((__x_cap * 3) - 1)
+                        __surrounding_regions[12] = region - ((__x_cap * 3) - 1)
                     else:
-                        __sxse = region - ((__x_cap * 2) - 1)
+                        __surrounding_regions[12] = region - ((__x_cap * 2) - 1)
 
                 # East by Southeast region.
                 if __y >= 1:
                     if (__x + 2) >= __x_cap:
-                        __exse = region - ((__x_cap * 2) - 2)
+                        __surrounding_regions[13] = region - ((__x_cap * 2) - 2)
                     else:
-                        __exse = region - (__x_cap - 2)
+                        __surrounding_regions[13] = region - (__x_cap - 2)
+
+                __surrounding_heights = 0
+                __surrounding_count = 0
+
+                __potential_heights = 0
+                __potential_count = 14
+
+                # Iterate over each surrounding region.
+                for each in __surrounding_regions:
+                    # Do this if the region is populated (Not just a '-1')
+                    if each >= 0:
+                        # Add the region's height to the surrounding_heights.
+                        __surrounding_heights += __galaxy[sector,planet,each,3]
+                        __surrounding_count += 1
+                        __potential_count -= 1
+
+                # Do this if there is at least one populated surrouding region.
+                if __surrounding_count > 0:
+                    # Find the average of the surrounding regions heights.
+                    __avg_surrounding = __surrounding_heights // __surrounding_count
+                # Do this if there are no populated surrounding regions.
+                else:
+                    __avg_surrounding = 0
+
+                if __avg_surrounding == 0:
+                    __avg_floor = 20
+                # Make sure the average height is 3 or higher.
+                elif __avg_surrounding >= 12:
+                    # Floor is a minimum of 1.
+                    __avg_floor = __avg_surrounding - 10
+                else:
+                    # Force floor to be a minimum of 1.
+                    __avg_floor = 1
+
+                if __avg_surrounding == 0:
+                    __avg_ceiling = 35
+                # Make sure the average height is no more than 37.
+                elif __avg_surrounding <= 28:
+                    # Ceiling is a maximum of 40.
+                    __avg_ceiling = __avg_surrounding + 11
+                else:
+                    # Force ceiling height to 40.
+                    __avg_ceiling = 40
+
+                # Do this if there are any non-populated surrounding regions.
+                if __potential_count > 0:
+                    __potential_height = random.randint((__avg_floor),(__avg_ceiling))
+                else:
+                    __potential_height = 0
+
+                '''
+                if (__avg_surrounding > 3 and __avg_surrounding < 38) or (__potential_height > 3 and __potential_height < 38):
+                    __random_factor = random.choice((-2,-1,0,1,2))
+                elif __avg_surrounding <= 3 or __potential_height <= 3:
+                    __random_factor = random.choice((0,1,2))
+                elif __avg_surrounding >= 38 or __potential_height >= 38:
+                    __random_factor = random.choice((-2,-1,0))
+                '''
+
+                __random_factor = 0
+                # Set the Region's height at the average between the populated and non-populated surrounding regions, plus/minus a random number.
+                __galaxy[sector,planet,region,3] = ((__avg_surrounding + __potential_height) // 2) + __random_factor
+
+
+                '''
+                print(f'Surrounding Heights: {__surrounding_heights}')
+                print(f'Surrounding Count: {__surrounding_count}')
+                print(f'Average Surroundings: {__avg_surrounding}')
+                print(f'Potential Heights: {__potential_heights}')
+                print(f'Potential Count: {__potential_count}')
+                print(f'Average Potential: {__potential_height}')
+                print(f'New Region Altitude: {__galaxy[sector,planet,region,3]}')
+                print(f'')
+                print(f'')
+                '''
 
 
 
-                print(f'__y: {__y}')
-                print()
 
-                print(f'Region ID: {__region_id}')
-
-                print('Current Region')
-                print(f'region: {region}')
-                print(__galaxy[sector,planet,region,1])
-                print(__galaxy[sector,planet,region,2])
-                print(f'__west_1: {__west_1}')
-                print(__galaxy[sector,planet,__west_1,1])
-                print(__galaxy[sector,planet,__west_1,2])
-                print(f'__west_2: {__west_2}')
-                print(__galaxy[sector,planet,__west_2,1])
-                print(__galaxy[sector,planet,__west_2,2])
-                print(f'__sw_1: {__sw_1}')
-                print(__galaxy[sector,planet,__sw_1,1])
-                print(__galaxy[sector,planet,__sw_1,2])
-                print(f'__sw_2: {__sw_2}')
-                print(__galaxy[sector,planet,__sw_2,1])
-                print(__galaxy[sector,planet,__sw_2,2])
-                print(f'__south_1: {__south_1}')
-                print(__galaxy[sector,planet,__south_1,1])
-                print(__galaxy[sector,planet,__south_1,2])
-                print(f'__south_2: {__south_2}')
-                print(__galaxy[sector,planet,__south_2,1])
-                print(__galaxy[sector,planet,__south_2,2])
-                print(f'__east_1: {__east_1}')
-                print(__galaxy[sector,planet,__east_1,1])
-                print(__galaxy[sector,planet,__east_1,2])
-                print(f'__east_2: {__east_2}')
-                print(__galaxy[sector,planet,__east_2,1])
-                print(__galaxy[sector,planet,__east_2,2])
-                print(f'__se_1: {__se_1}')
-                print(__galaxy[sector,planet,__se_1,1])
-                print(__galaxy[sector,planet,__se_1,2])
-                print(f'__se_2: {__se_2}')
-                print(__galaxy[sector,planet,__se_2,1])
-                print(__galaxy[sector,planet,__se_2,2])
-                print(f'__wxsw: {__wxsw}')
-                print(__galaxy[sector,planet,__wxsw,1])
-                print(__galaxy[sector,planet,__wxsw,2])
-                print(f'__sxsw: {__sxsw}')
-                print(__galaxy[sector,planet,__sxsw,1])
-                print(__galaxy[sector,planet,__sxsw,2])
-                print(f'__sxse: {__sxse}')
-                print(__galaxy[sector,planet,__sxse,1])
-                print(__galaxy[sector,planet,__sxse,2])
-                print(f'__exse: {__exse}')
-                print(__galaxy[sector,planet,__exse,1])
-                print(__galaxy[sector,planet,__exse,2])
-
-                print()
-                print()
-
-                __altitude = random.randint(0,14)
-
-                __galaxy[sector,planet,region,3] = random.randint(0,7)
                 __galaxy[sector,planet,region,4] = random.randint(0,7)
 
                 # Make sure we are not yet at the rightmost x column. Increment.
@@ -201,5 +218,23 @@ def stats_gen():
                 # Increment the region id.
                 __region_id += 1
 
+            print(f'__y_cap: {__y_cap}')
+            print(f'__x_cap: {__x_cap}')
+
+            for y in reversed(range(__y_cap)):
+                for x in range(__x_cap):
+                    if __galaxy[sector,planet,((y * __x_cap) + x),3] <= 9:
+                        print('.',end='')
+                    elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 19:
+                        print('*',end='')
+                    elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 29:
+                        print('n',end='')
+                    elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 35:
+                        print('M',end='')
+                    else:
+                        #print(__galaxy[sector,planet,((y * __x_cap) + x),3],end=' ')
+                        print('^',end='')
+                print('',end='\n')
+            print()
 
     return __galaxy
