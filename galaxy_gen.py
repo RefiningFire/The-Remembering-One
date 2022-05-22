@@ -126,81 +126,43 @@ def stats_gen():
                     else:
                         __surrounding_regions[13] = region - (__x_cap - 2)
 
-                __surrounding_heights = 0
-                __surrounding_count = 0
 
-                __potential_heights = 0
-                __potential_count = 14
+                # Set these variables to empty.
+                __surrounding_altitudes = []
+                __potential_count = 0
+                __floor = 0
+                __ceiling = 0
 
-                # Iterate over each surrounding region.
+                # Add each surrouding region's altitude to the list.
                 for each in __surrounding_regions:
-                    # Do this if the region is populated (Not just a '-1')
-                    if each >= 0:
-                        # Add the region's height to the surrounding_heights.
-                        __surrounding_heights += __galaxy[sector,planet,each,3]
-                        __surrounding_count += 1
-                        __potential_count -= 1
+                    if each == -1:
+                        __potential_count += 1
+                    else:
+                        __surrounding_altitudes.append(__galaxy[sector,planet,each,3])
 
-                # Do this if there is at least one populated surrouding region.
-                if __surrounding_count > 0:
-                    # Find the average of the surrounding regions heights.
-                    __avg_surrounding = __surrounding_heights // __surrounding_count
-                # Do this if there are no populated surrounding regions.
+                # If there are no surrounding altitudes, set the start at random.
+                if __potential_count == 14:
+                    __chosen_altitude = 20
                 else:
-                    __avg_surrounding = 0
+                    __chosen_altitude = random.choice(__surrounding_altitudes)
 
-                if __avg_surrounding == 0:
-                    __avg_floor = 20
-                # Make sure the average height is 3 or higher.
-                elif __avg_surrounding >= 12:
-                    # Floor is a minimum of 1.
-                    __avg_floor = __avg_surrounding - 10
+                # Set a min and max cap on altitude
+                if (__chosen_altitude - __potential_count) < 0:
+                    __floor = 1
+                    __ceiling = __chosen_altitude + __potential_count
+                elif (__chosen_altitude + __potential_count) > 39:
+                    __ceiling = 39
+                    __floor = __chosen_altitude - __potential_count
+                # Select a floor and ceiling, with variance greater if there are fewere known surrounding regions.
                 else:
-                    # Force floor to be a minimum of 1.
-                    __avg_floor = 1
+                    __floor = __chosen_altitude - __potential_count
+                    __ceiling = __chosen_altitude + __potential_count
 
-                if __avg_surrounding == 0:
-                    __avg_ceiling = 35
-                # Make sure the average height is no more than 37.
-                elif __avg_surrounding <= 28:
-                    # Ceiling is a maximum of 40.
-                    __avg_ceiling = __avg_surrounding + 11
-                else:
-                    # Force ceiling height to 40.
-                    __avg_ceiling = 40
+                # The new altitude is somewhere between the lowest and highest possibel.
+                __new_altitude = random.randint(__floor,__ceiling)
 
-                # Do this if there are any non-populated surrounding regions.
-                if __potential_count > 0:
-                    __potential_height = random.randint((__avg_floor),(__avg_ceiling))
-                else:
-                    __potential_height = 0
-
-                '''
-                if (__avg_surrounding > 3 and __avg_surrounding < 38) or (__potential_height > 3 and __potential_height < 38):
-                    __random_factor = random.choice((-2,-1,0,1,2))
-                elif __avg_surrounding <= 3 or __potential_height <= 3:
-                    __random_factor = random.choice((0,1,2))
-                elif __avg_surrounding >= 38 or __potential_height >= 38:
-                    __random_factor = random.choice((-2,-1,0))
-                '''
-
-                __random_factor = 0
-                # Set the Region's height at the average between the populated and non-populated surrounding regions, plus/minus a random number.
-                __galaxy[sector,planet,region,3] = ((__avg_surrounding + __potential_height) // 2) + __random_factor
-
-
-                '''
-                print(f'Surrounding Heights: {__surrounding_heights}')
-                print(f'Surrounding Count: {__surrounding_count}')
-                print(f'Average Surroundings: {__avg_surrounding}')
-                print(f'Potential Heights: {__potential_heights}')
-                print(f'Potential Count: {__potential_count}')
-                print(f'Average Potential: {__potential_height}')
-                print(f'New Region Altitude: {__galaxy[sector,planet,region,3]}')
-                print(f'')
-                print(f'')
-                '''
-
+                # Set the Altitude of the new region.
+                __galaxy[sector,planet,region,3] = __new_altitude
 
 
 
@@ -218,23 +180,26 @@ def stats_gen():
                 # Increment the region id.
                 __region_id += 1
 
+            ### PRINT PLANET MAP ###
+            '''
             print(f'__y_cap: {__y_cap}')
             print(f'__x_cap: {__x_cap}')
 
             for y in reversed(range(__y_cap)):
                 for x in range(__x_cap):
                     if __galaxy[sector,planet,((y * __x_cap) + x),3] <= 9:
-                        print('.',end='')
+                        print('o',end='')
                     elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 19:
-                        print('*',end='')
+                        print('o',end='')
                     elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 29:
-                        print('n',end='')
+                        print('#',end='')
                     elif __galaxy[sector,planet,((y * __x_cap) + x),3] <= 35:
-                        print('M',end='')
+                        print('#',end='')
                     else:
                         #print(__galaxy[sector,planet,((y * __x_cap) + x),3],end=' ')
                         print('^',end='')
                 print('',end='\n')
             print()
-
+            '''
+            ### PRINT PLANET MAP ###
     return __galaxy
