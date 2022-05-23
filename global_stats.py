@@ -28,8 +28,7 @@ stats = {
 }
 
 galaxy_stats = galaxy_gen.stats_gen()
-
-print(galaxy_stats)
+#print(galaxy_stats)
 
 
 
