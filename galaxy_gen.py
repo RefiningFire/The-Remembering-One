@@ -3,8 +3,8 @@ import numpy as np
 import random
 
 
-max_sectors = 2
-max_systems = 2 + 1
+max_sectors = 4
+max_systems = 4 + 1
 max_planets = 10 + 1
 max_circumference = 8 # Earth is ~ 250. Unit is 1000 miles.
 max_regions = (max_circumference * (max_circumference//2)) + 1
@@ -16,9 +16,12 @@ system_meta_data = max_planets - 1
 planet_meta_data = max_regions - 1
 
 
+__solar_mass = 1.98847 * (10**30)
+
+
 def stats_gen():
     # Set up an array to return, filled in with the maximum possible items.
-    __galaxy = np.zeros((max_sectors,max_systems,max_planets,max_regions,max_items), dtype='i')
+    __galaxy = np.zeros((max_sectors,max_systems,max_planets,max_regions,max_items))
 
     # Setting this allows us to assign a unique number to each region.
     __planet_id = 1
@@ -35,10 +38,11 @@ def stats_gen():
             ### SYSTEM META DATA ###
             ## 0,0: System ID
             ## 0,1:
-            ## 0,2: Star Type
-            ## 0,3: Star Mass (unit = 1/100th of a Solar Mass)
-            ## 0,4:
-            ## 0,5:
+            ## 0,2: Stellar Type
+            ## 0,3: Stellar Mass (unit = 1 kg)
+            ## 0,4: Stellar Luminosity (unit = 1/100th Solar Luminosity)
+            ## 0,5: Stellar Radius
+            ## 0,6: Stellar Temperature
 
             # 1 = O is 1 in 3,000,000 (0.00003%), Extremely Luminous Ultraviolet
             # 2 = B is 1 in 800 (0.125%), Very Luminous Blue
@@ -51,23 +55,42 @@ def stats_gen():
 
             __galaxy[sector,system,system_meta_data,0,2] = __temp_star_type[0]
 
-            # Set stellar mass depending on the star type.
+            # Set stellar stats depending on the star type.
             if __galaxy[sector,system,system_meta_data,0,2] == 1:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(1600,25000)
+                # Stellar Mass
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(16*__solar_mass,25*__solar_mass)
+
+                # Stellar Luminosity
+                # (Stellar Mass ** 3.5) * .01 to
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
+                # Stellar Radius
+                #__galaxy[sector,system,system_meta_data,0,5] =
+
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 2:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(210,1600)
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(2.1*__solar_mass,16*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 3:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(140,210)
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(1.4*__solar_mass,2.1*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 4:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(104,140)
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(1.04*__solar_mass,1.4*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 5:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(80,104)
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(0.8*__solar_mass,1.04*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 6:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(45,80)
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(0.45*__solar_mass,0.8*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
+
             elif __galaxy[sector,system,system_meta_data,0,2] == 7:
-                __galaxy[sector,system,system_meta_data,0,3] = random.randint(8,45)
-
-
+                __galaxy[sector,system,system_meta_data,0,3] = random.randint(0.08*__solar_mass,0.45*__solar_mass)
+                __galaxy[sector,system,system_meta_data,0,4] = (__galaxy[sector,system,system_meta_data,0,3] ** 3.5) * .01
 
             ### END SYSTEM META DATA ###
 
@@ -81,11 +104,13 @@ def stats_gen():
 
                 ### PLANET META DATA ###
                 ## 0: Planet ID
-                ## 1: Distance from Sun (unit = million miles)
+                ## 1: Distance from Sun (unit = million km)
                 ## 2: Planetary Circumference (unit = 1000 miles)
                 ## 3: Planetary Mass (unit = 0.1 MicroSuns (Earth is 30))
                 ## 4: Orbital Period (unti =  earth day)
                 ## 5: Rotation (unit = earth hour)
+                ## 6: Planet Type
+                ## 7: Planet Effective Temp
                 # Set Planet id.
                 __galaxy[sector,system,planet,planet_meta_data,0] = __planet_id
                 __planet_id += 1
@@ -99,9 +124,85 @@ def stats_gen():
                 # Create a random planetary circumference.
                 __galaxy[sector,system,planet,planet_meta_data,2] = __circumference = random.randint(1,max_circumference)
 
-                # Set the planet's mass in MicroSuns.
-                __galaxy[sector,system,planet,planet_meta_data,3] = random.randint(5,600)
 
+                # Mercury = 58
+
+                # Venus =  108
+                # Earth = 150
+                # Mars = 228
+
+                # Ceres (Asteroid Belt) = 414
+
+                # Jupiter = 780
+                # Saturn = 1420
+
+                # Uranus = 2870
+                # Neptune = 4500
+
+                # Pluto = 5800
+                # Kuiper Belt Outer Limit = 7500
+
+                # Mercury Like Planets.
+                if __galaxy[sector,system,planet,planet_meta_data,1] <= 83:
+                    pass
+                # Earth, Mars, Venus Like Planets.
+                elif __galaxy[sector,system,planet,planet_meta_data,1] <= 352:
+                    pass
+                # Asteroid Belt like Objects.
+                elif __galaxy[sector,system,planet,planet_meta_data,1] <= 597:
+                    pass
+                # Jupiter, Saturn potentially.
+                elif __galaxy[sector,system,planet,planet_meta_data,1] <= 2145:
+                    pass
+                # Uranus, Neptun potentially.
+                elif __galaxy[sector,system,planet,planet_meta_data,1] <= 5150:
+                    pass
+                # Pluto Like, Kuiper Belt.
+                elif __galaxy[sector,system,planet,planet_meta_data,1] <= 8000:
+                    pass
+                # Beyond the Kuiper Belt.
+                else:
+                    pass
+
+                # ((Stellar Luminosity/100) * (1 - Bond Albedo)) / (16 * Stefan-Boltzmann Constant * pi * (Distance from Sun ** 2)) ** 1/4
+                __temp_temperature = (__galaxy[sector,system,system_meta_data,0,4] * (1 -.3)) /(16 * 5.67 * 3.14 * (__galaxy[sector,system,planet,planet_meta_data,1] ** 2))** .25
+
+                __temp_fahrenheit = ((__temp_temperature - 273.15)*9/5)+32
+
+                __galaxy[sector,system,planet,planet_meta_data,7] = __temp_fahrenheit
+
+                print('Stellar type:')
+                print(__galaxy[sector,system,system_meta_data,0,2])
+                print('Stellar Luminosity')
+                print(__galaxy[sector,system,system_meta_data,0,4])
+                print('Stellar Mass')
+                print(__galaxy[sector,system,system_meta_data,0,3])
+                print('Distance (million km)')
+                print(__galaxy[sector,system,planet,planet_meta_data,1])
+                print('Temp (unit unknown)')
+                print(__galaxy[sector,system,planet,planet_meta_data,7])
+
+                print()
+                # Planetary Compositions
+                # 1 = Iron Planet (Mostly Iron. Mercury is 70%. Close to Star.)
+
+                # 2 = Silicate Planet (Rocky Mantle, Metallic Core.)
+                # 3 = Carbon Planet (Mineral Mantle, Metallic Core.)
+                # 4 = Coreless Planet (Silicate w/no Iron Core.)
+
+                # 5 = Gas Giant
+                # 6 = Gas Dwarf
+
+                # 7 = Ice Giant
+                # 8 = Ice Dwarf
+
+                # 9 = Ice Planet (Icy Volatile Surface. Titan, Pluto.)
+
+                # Set the Planet's type.
+                #__galaxy[sector,system,planet,planet_meta_data,6] = random.choices([1,2,3,4,5,6,7,8,9],weights=[__planet_weights])
+
+                # Set the planet's mass in 1/100th Earth Mass.
+                __galaxy[sector,system,planet,planet_meta_data,3] = random.randint(5,600)
 
 
 
@@ -236,8 +337,8 @@ def stats_gen():
                         __floor = __chosen_altitude - __potential_count
                     # Select a floor and ceiling, with variance greater if there are fewere known surrounding regions.
                     else:
-                        __floor = __chosen_altitude - __potential_count
-                        __ceiling = __chosen_altitude + __potential_count
+                        __floor = int(__chosen_altitude - __potential_count)
+                        __ceiling = int(__chosen_altitude + __potential_count)
 
                     # The new altitude is somewhere between the lowest and highest possibel.
                     __new_altitude = random.randint(__floor,__ceiling)
@@ -263,7 +364,6 @@ def stats_gen():
 
                     # Increment the region id.
                     __region_id += 1
-
 
 
                 ### PRINT PLANET MAP ###
