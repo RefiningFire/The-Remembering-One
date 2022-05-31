@@ -19,7 +19,8 @@ stats = {
 
     'greenhouse_modules':10,'greenhouse_condition':100,'greenhouse_space_used':10,
 
-    'planet_habitability':0,
+    'planet_habitability':0,'atmosphere_percentage':40,
+    'ocean_percentage':40,'arable_percentage':30,
 
     'year':0,
     'day':0,
@@ -27,7 +28,7 @@ stats = {
     'current_card_id':''
 }
 
-galaxy_stats = galaxy_gen.stats_gen()
+#galaxy_stats = galaxy_gen.stats_gen()
 #print(galaxy_stats)
 
 

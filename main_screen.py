@@ -13,15 +13,15 @@ from global_stats import *
 
 class MainScreen(Screen):
     def increase(self):
-        stats['settlers_count'] += 5
+        #stats['settlers_count'] += 5
         stats['teens_count'] += 4
         stats['children_count'] += 3
-        stats['babies_count'] += 2
+        #stats['babies_count'] += 2
 
-        stats['settlers_approval'] += 5
+        #stats['settlers_approval'] += 5
         stats['teens_approval'] += 4
         stats['children_approval'] += 3
-        stats['babies_approval'] += 2
+        #stats['babies_approval'] += 2
 
         stats['planet_habitability'] += 7
         stats['year'] += 1
@@ -36,7 +36,7 @@ class MainScreen(Screen):
 
         stats['greenhouse_space_used'] -= 1
 
-        print(galaxy_stats[1,0,0,3]) # Planet 1, x 0, y 0, item 3
+        #print(galaxy_stats[1,0,0,3]) # Planet 1, x 0, y 0, item 3
 
     def draw_card(self):
         # Set iter and selected card variables
@@ -126,7 +126,9 @@ class MainScreen(Screen):
 
         # Clear the type and amount holders. They will be used when binding the option button.
         self.cur_opt_cost_type = []
+        self.cur_opt_cost_type_text = []
         self.cur_opt_cost_amt = []
+        self.cur_opt_cost_amt_text = []
         self.cur_opt_rwd_type = []
         self.cur_opt_rwd_amt = []
         self.cur_opt_new_cards = []
@@ -139,13 +141,16 @@ class MainScreen(Screen):
             # The current cost amount.
             self.__cost_amt = self.__options[self.__cur_opt]['cost_amt'][i]
 
+            # Convert the background ID's and numbers into readable text.
+            self.__type_text,self.__amt_text  = self.type_text_select(self.__cost_type,self.__cost_amt,'cost')
+
             # Save the option type and amt to the button so they can change.
             self.cur_opt_cost_type.append(self.__cost_type)
             self.cur_opt_cost_amt.append(self.__cost_amt)
 
             # Add a label for each cost.
             self.option_cost = Label(
-                        text=self.__cost_type + ': ' + str(self.__cost_amt))
+                        text=self.__type_text + ': ' + self.__amt_text)
 
             # Add the label to the cost layout.
             self.option_cost_layout.add_widget(self.option_cost)
@@ -169,13 +174,16 @@ class MainScreen(Screen):
             # The current reward amount.
             self.__rwd_amt = self.__options[self.__cur_opt]['rwd_amt'][i]
 
+            # Convert the background ID's and numbers into readable text.
+            self.__type_text,self.__amt_text  = self.type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
+
             # Save the reward type and amt to the button so they can change.
             self.cur_opt_rwd_type.append(self.__rwd_type)
             self.cur_opt_rwd_amt.append(self.__rwd_amt)
 
             # Add a label for each reward.
             self.option_reward = Label(
-                        text=self.__rwd_type + ': ' + str(self.__rwd_amt))
+                        text=self.__type_text + ': ' + self.__amt_text)
 
             # Add the label to the reward layout.
             self.option_reward_layout.add_widget(self.option_reward)
@@ -256,6 +264,7 @@ class MainScreen(Screen):
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
+        print(self.opt1_cost_amt)
         for item in range(len(self.opt1_cost_types)):
             stats[self.opt1_cost_types[item]] += self.opt1_cost_amt[item]
         for item in range(len(self.opt1_rwd_types)):
@@ -305,3 +314,32 @@ class MainScreen(Screen):
 
         self.__ids.habitat_fill.size = (stats['habitat_condition'],self.__ids.habitat_fill.parent.height)
         self.__ids.greenhouse_fill.size = (stats['greenhouse_condition'],self.__ids.greenhouse_fill.parent.height)
+
+    def type_text_select(self,type,amt,cost_rwd):
+
+        # Remove any Underscores.
+        self.__temp = type.replace('_',' ')
+
+        # Capitalize each word.
+        self.__type_text = self.__temp.title()
+
+        # Set the unit, v if a cost, ^ if a reward, and E in any other case.
+        self.__unit = 'v' if cost_rwd == 'cost' else '^' if cost_rwd == 'rwd' else 'E'
+
+        # Set the amount text depending on what percentage of the existing stat is being changed.
+        if stats[type] == 0:
+            self.__amt_text = '-'
+        elif amt/stats[type] > 1:
+            self.__amt_text = self.__unit * 5
+        elif amt/stats[type] > .60 and amt / stats[type] <= 1:
+            self.__amt_text = self.__unit * 4
+        elif amt/stats[type] > .30 and amt / stats[type] <= .60:
+            self.__amt_text = self.__unit * 3
+        elif amt/stats[type] > .10 and amt / stats[type] <= .30:
+            self.__amt_text = self.__unit * 2
+        elif amt/stats[type] > 0 and amt / stats[type] <= .10:
+            self.__amt_text = self.__unit * 1
+        else:
+            self.__amt_text = 'NONE'
+
+        return self.__type_text, self.__amt_text

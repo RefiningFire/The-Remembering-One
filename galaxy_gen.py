@@ -8,7 +8,7 @@ max_systems = 4 + 1
 max_planets = 10 + 1
 max_circumference = 300 # Earth is ~ 250. Unit is 100 miles.
 max_regions = ((max_circumference*15) * ((max_circumference*15)//2)) + 1
-max_items = 12
+max_items = 20
 
 
 sector_meta_data = max_systems - 1
@@ -158,6 +158,20 @@ def stats_gen():
                 ## 9: X Cap
                 ## 10: Y Cap
                 ## 11: Planetary Bond-Albedo value
+
+                ### All Atmospheric units are 1 kg.
+                ## 12: Planetary Atmospheric Mass.
+                ## 13: Atmospheric Nitrogen.
+                ## 14: Atmospheric Oxygen.
+                ## 15: Atmospheric Carbon Dioxide.
+                ## 16: Atmospheric Methane.
+                ## 17: Atmospheric Nitrous Oxide.
+                ## 18: Troposphere Mass Cap.
+                ## 19: Stratosphere Mass Cap.
+                ## 20: Mesosphere Mass Cap.
+                ## 21: Thermosphere Mass Cap.
+                ## 22: Exosphere Mass Cap.
+
                 # Set Planet id.
                 __galaxy[sector,system,planet,planet_meta_data,0] = __planet_id
                 __planet_id += 1
@@ -198,6 +212,40 @@ def stats_gen():
 
                 # Convert the planet's effective temp to fahrenheit
                 __temp_fahrenheit = kelvin_to_fahrenheit(sector,system,planet)
+
+                # Set Atmosphere if Gas.
+                if __galaxy[sector,system,planet,planet_meta_data,6] == 1:
+                    pass
+                # Set Atmosphere if Terrestrial.
+                elif __galaxy[sector,system,planet,planet_meta_data,6] == 2:
+                    # Set the starting Nitrogen count in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,13] = random.uniform(1,1000)
+                    # Set the starting Oxygen count in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,14] = random.uniform(0,1*(10**10))
+                    # Set the starting Carbon Dioxide count in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,15] = random.uniform(0,1*(10**10))
+                    # Set the starting Methane count in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,16] = random.uniform(0,1*(10**10))
+                    # Set the starting Nitrous Oxide count in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,17] = random.uniform(0,1*(10**10))
+
+                    # Set the starting Atmospheric Mass in kg.
+                    __galaxy[sector,system,planet,planet_meta_data,12] = __galaxy[sector,system,planet,planet_meta_data,13] +   __galaxy[sector,system,planet,planet_meta_data,14] +    __galaxy[sector,system,planet,planet_meta_data,15] +    __galaxy[sector,system,planet,planet_meta_data,16] +    __galaxy[sector,system,planet,planet_meta_data,17]
+
+
+
+                print(__galaxy[sector,system,planet,planet_meta_data,13])
+
+                ## 12: Planetary Atmospheric Mass.
+                ## 14: Atmospheric Oxygen.
+                ## 15: Atmospheric Carbon Dioxide.
+                ## 16: Atmospheric Methane.
+                ## 17: Atmospheric Nitrous Oxide.
+                ## 18: Troposphere Mass Cap.
+                ## 19: Stratosphere Mass Cap.
+                ## 20: Mesosphere Mass Cap.
+                ## 21: Thermosphere Mass Cap.
+                ## 22: Exosphere Mass Cap.
 
 
                 print('Stellar type:')

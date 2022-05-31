@@ -23,7 +23,7 @@
 
 <CountLabel@Label>:
     size_hint: None, None
-    size: 120, self.parent.height - self.parent.parent.spacing
+    size: 100, self.parent.height - self.parent.parent.spacing
 
 <MeterFrame@BoxLayout>:
     orientation: 'horizontal'
@@ -33,7 +33,7 @@
     size: 100, self.parent.height - self.parent.spacing - self.parent.parent.spacing
     canvas:
         Color:
-            rgba: (100,0,0,1)
+            rgba: (1,0,0,1)
         RoundedRectangle:
             size: self.size
             pos: self.pos
@@ -44,11 +44,12 @@
     pos: 0,0
     canvas:
         Color:
-            rgba: (0,100,0,1)
+            rgba: (0,1,0,1)
         RoundedRectangle:
             size: self.size
             pos: self.pos
             radius: [5,5,5,5]
+
 
 
 <MainScreen>:
@@ -170,6 +171,64 @@
                     size: self.size
                     pos: self.pos
                     radius: [0,0,0,30]
+            CornerItemBox:
+                Label:
+                    text: 'Surface:'
+                CountLabel:
+                    id: surface_percentage
+                    text: str(int(app.start_stats['ocean_percentage'] * 1.408450704225352)) + '%'
+                MeterFrame:
+                    canvas:
+                        Color:
+                            rgba: (.361,.194,0,1)
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [10,10,10,10]
+                    MeterFill:
+                        id: ocean_fill
+                        size: app.start_stats['ocean_percentage'], self.parent.height
+                        canvas:
+                            Color:
+                                rgba: (0,0,1,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [5,0,0,5]
+                    MeterFill:
+                        id: arable_fill
+                        size: app.start_stats['arable_percentage'], self.parent.height
+                        canvas:
+                            Color:
+                                rgba: (.1,.8,0,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [0,5,5,0]
+            CornerItemBox:
+                Label:
+                    text: 'Atmosphere:'
+                CountLabel:
+                    id: atmosphere_percentage
+                    text: str(app.start_stats['atmosphere_percentage']) + '%'
+                MeterFrame:
+                    canvas:
+                        Color:
+                            rgba: (.75,.75,.75,1)
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [10,10,10,10]
+                    MeterFill:
+                        id: atmosphere_fill
+                        size: app.start_stats['atmosphere_percentage'], self.parent.height
+                        canvas:
+                            Color:
+                                rgba: (0,.5,1,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [5,5,5,5]
             CornerItemBox:
                 Label:
                     text: 'Habitat Modules:'
