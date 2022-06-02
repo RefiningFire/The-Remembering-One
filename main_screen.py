@@ -133,16 +133,22 @@ class MainScreen(Screen):
             # Short link to the current option. (Opt1, opt2, etc.)
             self.__cur_opt = 'opt' + str(each+1)
 
+            # Option will be added to the card unless a false condition is found.
             self.__display_option = True
 
-            # Check for any stat requirements on the option.
-            for i in range(len(self.__options[self.__cur_opt]['req_type'])):
-
-                # For each requirement, check if that stat is below the required amount. If so, do not display the option.
-                if stats[self.__options[self.__cur_opt]['req_type'][i]] < self.__options[self.__cur_opt]['req_amt'][i]:
+            # Check for any option floor stats not met.
+            for i in range(len(self.__options[self.__cur_opt]['req_type_flr'])):
+                if stats[self.__options[self.__cur_opt]['req_type_flr'][i]] < self.__options[self.__cur_opt]['req_amt_flr'][i]:
                     self.__display_option = False
+                    break
 
-            # If there are no requirements, or if all requirements are met, display the option.
+            # Check for any option cap stats exceeded.
+            for i in range(len(self.__options[self.__cur_opt]['req_type_cap'])):
+                if stats[self.__options[self.__cur_opt]['req_type_cap'][i]] > self.__options[self.__cur_opt]['req_amt_cap'][i]:
+                    self.__display_option = False
+                    break
+
+            # If all stats are met, add the option to the card.
             if self.__display_option == True:
                 self.add_option(self.__options,self.__cur_opt,each)
 
@@ -324,7 +330,6 @@ class MainScreen(Screen):
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
-        print(self.opt1_cost_amt)
         for item in range(len(self.opt1_cost_types)):
             stats[self.opt1_cost_types[item]] += self.opt1_cost_amt[item]
         for item in range(len(self.opt1_rwd_types)):
