@@ -46,16 +46,43 @@ class MainScreen(Screen):
 
     # Draw a card from the main deck, and display it on the Screen.
     def draw_card(self):
+
+        # The possible draws list contains cards that will be selected from.
+        self.__possible_draws = []
+
+        # Search through each card in the main deck.
+        for card in main_deck:
+
+            # Cards will be added to the drawable list unless a false condition is found.
+            self.__card_drawable = True
+
+            # Check for any floor stats not met.
+            for i in range(len(main_deck[card]['req_type_flr'])):
+                if stats[main_deck[card]['req_type_flr'][i]] < main_deck[card]['req_amt_flr'][i]:
+                    self.__card_drawable = False
+                    break
+
+            # Check for any cap stats exceeded.
+            for i in range(len(main_deck[card]['req_type_cap'])):
+                if stats[main_deck[card]['req_type_cap'][i]] > main_deck[card]['req_amt_cap'][i]:
+                    self.__card_drawable = False
+                    break
+
+            # Add the drawable card id to the possible draws list.
+            if self.__card_drawable == True:
+                self.__possible_draws.append(card)
+
         # Set iter and selected card variables
-        self.__selected_card = random.randint(0,len(main_deck)-1)
-        self.__card_draw_iter = 0
+        self.__selected_card = random.randint(1,len(self.__possible_draws))
+        self.__card_draw_iter = 1
 
         # Iterate through the main deck until the randomly selected number is found.
-        for card in main_deck:
+        for card in self.__possible_draws:
             if self.__card_draw_iter == self.__selected_card:
                 # Set drawn card id.
                 stats['current_card_id'] = card
                 break
+
             self.__card_draw_iter += 1
 
         # Short link to the main screen Float Layout
@@ -108,14 +135,12 @@ class MainScreen(Screen):
 
             self.__display_option = True
 
-            # First check if the option has any requirements.
-            if 'req_type' in self.__options[self.__cur_opt]:
+            # Check for any stat requirements on the option.
+            for i in range(len(self.__options[self.__cur_opt]['req_type'])):
 
-                for i in range(len(self.__options[self.__cur_opt]['req_type'])):
-
-                    # For each requirement, check if that stat is below the required amount. If so, do not display the option.
-                    if stats[self.__options[self.__cur_opt]['req_type'][i]] < self.__options[self.__cur_opt]['req_amt'][i]:
-                        self.__display_option = False
+                # For each requirement, check if that stat is below the required amount. If so, do not display the option.
+                if stats[self.__options[self.__cur_opt]['req_type'][i]] < self.__options[self.__cur_opt]['req_amt'][i]:
+                    self.__display_option = False
 
             # If there are no requirements, or if all requirements are met, display the option.
             if self.__display_option == True:
