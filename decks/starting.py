@@ -21,7 +21,7 @@ deck = {
                 'text':'Option 3','new_cards':['SD004'],
                 'cost_type':['settler_count'],'cost_amt':[3],
                 'rwd_type':['settler_count'],'rwd_amt':[3],
-                'time':3
+                'time':4
             }}},
 'SD002':{
         'name':'The second event',
@@ -71,7 +71,7 @@ deck = {
                 'cost_type':['settler_count'],'cost_amt':[3],
                 'rwd_type':['settler_count'],'rwd_amt':[3],
                 'req_type':[],'req_amt':[],
-                'time':3
+                'time':72
             }}},
 'SD004':{
         'name':'The fourth event',
@@ -97,6 +97,6 @@ deck = {
                 'cost_type':['settler_count'],'cost_amt':[3],
                 'rwd_type':['settler_count'],'rwd_amt':[3],
                 'req_type':[],'req_amt':[],
-                'time':3
+                'time':4
             }}}
 }

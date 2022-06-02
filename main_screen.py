@@ -25,9 +25,9 @@ class MainScreen(Screen):
         #stats['baby_approval'] += 2
 
         stats['planet_habitability'] += 7
-        stats['year'] += 1
-        stats['day'] += 1
-        stats['hour'] += 1
+        #stats['year'] += 1
+        #stats['day'] += 1
+        #stats['hour'] += 1
 
         stats['habitat_modules'] += 0
 
@@ -179,16 +179,22 @@ class MainScreen(Screen):
             # Add the label to the cost layout.
             self.option_cost_layout.add_widget(self.option_cost)
 
+        # The current time cost.
+        self.__time_cost = self.__options[self.__cur_opt]['time']
+
         # Set types and amounts of cost for each option.
         if each == 0:
             self.opt1_cost_types = self.cur_opt_cost_type
             self.opt1_cost_amt = self.cur_opt_cost_amt
+            self.opt1_time = self.__time_cost
         elif each == 1:
             self.opt2_cost_types = self.cur_opt_cost_type
             self.opt2_cost_amt = self.cur_opt_cost_amt
+            self.opt2_time = self.__time_cost
         elif each == 2:
             self.opt3_cost_types = self.cur_opt_cost_type
             self.opt3_cost_amt = self.cur_opt_cost_amt
+            self.opt3_time = self.__time_cost
 
         # Iterate over each reward.
         for i in range(len(self.__options[self.__cur_opt]['rwd_type'])):
@@ -300,6 +306,7 @@ class MainScreen(Screen):
             stats[self.opt1_rwd_types[item]] += self.opt1_rwd_amt[item]
         for card in self.opt1_new_cards:
             self.add_card(card)
+        update_time(self.opt1_time)
         self.load_buttons()
         self.discard_card()
     def opt2_select(self,instance):
@@ -309,6 +316,7 @@ class MainScreen(Screen):
             stats[self.opt2_rwd_types[item]] += self.opt2_rwd_amt[item]
         for card in self.opt2_new_cards:
             self.add_card(card)
+        update_time(self.opt2_time)
         self.load_buttons()
         self.discard_card()
     def opt3_select(self,instance):
@@ -318,6 +326,7 @@ class MainScreen(Screen):
             stats[self.opt3_rwd_types[item]] += self.opt3_rwd_amt[item]
         for card in self.opt3_new_cards:
             self.add_card(card)
+        update_time(self.opt3_time)
         self.load_buttons()
         self.discard_card()
 
@@ -380,6 +389,18 @@ class MainScreen(Screen):
             self.__amt_text = 'NONE'
 
         return self.__type_text, self.__amt_text
+
+# General function for updating the hours, days, and years.
+def update_time(hours):
+    stats['hour'] += hours
+
+    while stats['hour'] >= 24:
+        stats['hour'] -= 24
+        stats['day'] += 1
+
+    if stats['day'] > 7:
+        stats['day'] = 1
+        stats['year'] += 1
 
 # General function for updating a canvas after it has been added to another widget.
 def update_rect(instance, value):
