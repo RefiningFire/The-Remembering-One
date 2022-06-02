@@ -141,7 +141,7 @@ class MainScreen(Screen):
 
         # The button that selects the current option.
         self.option_btn = Button(
-                            text=self.__options[self.__cur_opt]['text'],
+                            text=(f'{self.__options[self.__cur_opt]["text"]}\nHours: {self.__options[self.__cur_opt]["time"]}'),
                             size_hint=(1.3,1))
 
         # The cost and reward layouts.
@@ -381,7 +381,7 @@ class MainScreen(Screen):
 
         return self.__type_text, self.__amt_text
 
-
+# General function for updating a canvas after it has been added to another widget.
 def update_rect(instance, value):
     instance.rect.pos = instance.pos
     instance.rect.size = instance.size
