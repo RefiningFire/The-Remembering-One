@@ -79,15 +79,27 @@ class MainScreen(Screen):
         self.current_card.canvas.add(Color(1,1,1,.5))
         self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
 
-        # Card Title and Text.
+        # Card Title, and background.
         self.title = Label(text=main_deck[stats['current_card_id']]['name'],font_size=80,size_hint=(1,.3))
+
+        with self.title.canvas.before:
+            Color(.4,.4,.4)
+            self.title.rect = Rectangle(pos=self.title.pos, size=self.title.size)
+
+        # Card Text and background.
         self.text = Label(text=main_deck[stats['current_card_id']]['text'])
 
-        # Add Title and Text to card base.
+        with self.text.canvas.before:
+            Color(.4,.4,.4)
+            self.text.rect = Rectangle(pos=self.text.pos, size=self.text.size)
+
+        # Add Title to card base, update its pos and size.
         self.current_card.add_widget(self.title)
+        self.title.bind(pos=update_rect,size=update_rect)
+
+        # Add Text to card base, update its pos and size.
         self.current_card.add_widget(self.text)
-
-
+        self.text.bind(pos=update_rect,size=update_rect)
 
         # Iterate over each option in the card.
         for each in range(len(self.__options)):
@@ -130,7 +142,7 @@ class MainScreen(Screen):
         # The button that selects the current option.
         self.option_btn = Button(
                             text=self.__options[self.__cur_opt]['text'],
-                            size_hint=(1.4,1))
+                            size_hint=(1.3,1))
 
         # The cost and reward layouts.
         self.option_cost_layout = BoxLayout(orientation='vertical')
