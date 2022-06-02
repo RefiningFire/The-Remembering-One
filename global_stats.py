@@ -10,10 +10,10 @@ import galaxy_gen
 import numpy as np
 
 stats = {
-    'babies_count':0,'babies_approval':0,
-    'children_count':0,'children_approval':0,
-    'teens_count':0,'teens_approval':0,
-    'settlers_count':100,'settlers_approval':50,
+    'baby_count':0,'baby_approval':0,
+    'child_count':0,'child_approval':0,
+    'teen_count':0,'teen_approval':0,
+    'settler_count':100,'settler_approval':50,
 
     'habitat_modules':20,'habitat_condition':100,'habitat_space_used':10,
 
@@ -24,6 +24,7 @@ stats = {
 
     'year':0,
     'day':0,
+    'hour':0,
 
     'current_card_id':''
 }

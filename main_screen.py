@@ -12,32 +12,39 @@ from global_stats import *
 
 
 class MainScreen(Screen):
+    # Increasing the stat.
     def increase(self):
-        #stats['settlers_count'] += 5
-        stats['teens_count'] += 4
-        stats['children_count'] += 3
-        #stats['babies_count'] += 2
+        #stats['settler_count'] += 5
+        stats['teen_count'] += 4
+        stats['child_count'] += 3
+        #stats['baby_count'] += 2
 
-        #stats['settlers_approval'] += 5
-        stats['teens_approval'] += 4
-        stats['children_approval'] += 3
-        #stats['babies_approval'] += 2
+        #stats['settler_approval'] += 5
+        stats['teen_approval'] += 4
+        stats['child_approval'] += 3
+        #stats['baby_approval'] += 2
 
         stats['planet_habitability'] += 7
         stats['year'] += 1
         stats['day'] += 1
+        stats['hour'] += 1
 
         stats['habitat_modules'] += 0
 
+        stats['ocean_percentage'] += 1
+        stats['arable_percentage'] += 1
+        stats['atmosphere_percentage'] += 1
+
         # Habitat free space is the number of pops divided by 10, rounded up.
         stats['habitat_space_used']=math.ceil((
-                            stats['settlers_count'] +
-                            stats['teens_count'] + stats['children_count'] + stats['babies_count']) / 10)
+                            stats['settler_count'] +
+                            stats['teen_count'] + stats['child_count'] + stats['baby_count']) / 10)
 
         stats['greenhouse_space_used'] -= 1
 
         #print(galaxy_stats[1,0,0,3]) # Planet 1, x 0, y 0, item 3
 
+    # Draw a card from the main deck, and display it on the Screen.
     def draw_card(self):
         # Set iter and selected card variables
         self.__selected_card = random.randint(0,len(main_deck)-1)
@@ -105,6 +112,7 @@ class MainScreen(Screen):
         # Once all the layout of the card is done, add it to the Float Layout of the main screen.
         self.__parent.add_widget(self.current_card)
 
+    # Adds an option to the card display.
     def add_option(self, options,cur_opt,each):
         self.__options = options
         self.__cur_opt = cur_opt
@@ -112,13 +120,17 @@ class MainScreen(Screen):
         # The base layout of the layout.
         self.option_layout = BoxLayout(
                                 orientation='horizontal',
-                                size_hint_y=None,
-                                height=100)
+                                size_hint=(1,.2))
+
+        # Build the background for the option.
+        with self.option_layout.canvas:
+            Color(.4, .4, .4)
+            self.option_layout.rect = Rectangle(pos=self.option_layout.pos, size=self.option_layout.size)
 
         # The button that selects the current option.
         self.option_btn = Button(
                             text=self.__options[self.__cur_opt]['text'],
-                            size=self.option_layout.size)
+                            size_hint=(1.4,1))
 
         # The cost and reward layouts.
         self.option_cost_layout = BoxLayout(orientation='vertical')
@@ -227,9 +239,13 @@ class MainScreen(Screen):
         # Add the reward layout to the option layout.
         self.option_layout.add_widget(self.option_reward_layout)
 
+        # Update the position and size of the option background.
+        self.option_layout.bind(pos=update_rect,size=update_rect)
+
         # Add the option layout to the card base.
         self.current_card.add_widget(self.option_layout)
 
+    # Removes a card from the screen, and from the Main Deck.
     def discard_card(self):
         # Short link to the main screen Float Layout.
         self.__parent = sm.get_screen('main').ids.pops.parent
@@ -245,6 +261,7 @@ class MainScreen(Screen):
         # Remove this card from the main deck.
         main_deck.pop(stats['current_card_id'])
 
+    # Adds a card to the Main Deck.
     def add_card(self,new_id):
         self.__cards_to_be_added = []
 
@@ -292,29 +309,37 @@ class MainScreen(Screen):
         self.load_buttons()
         self.discard_card()
 
+    # Update the text of all buttons and labels.
     def load_buttons(self):
         self.__ids = sm.get_screen('main').ids
 
-        self.__ids.babies_count.text = str(stats['babies_count'])
-        self.__ids.children_count.text = str(stats['children_count'])
-        self.__ids.teens_count.text = str(stats['teens_count'])
-        self.__ids.settlers_count.text = str(stats['settlers_count'])
+        self.__ids.baby_count.text = str(stats['baby_count'])
+        self.__ids.child_count.text = str(stats['child_count'])
+        self.__ids.teen_count.text = str(stats['teen_count'])
+        self.__ids.settler_count.text = str(stats['settler_count'])
 
-        self.__ids.babies_fill.size = (stats['babies_approval'],self.__ids.babies_fill.parent.height)
-        self.__ids.children_fill.size = (stats['children_approval'],self.__ids.children_fill.parent.height)
-        self.__ids.teens_fill.size = (stats['teens_approval'],self.__ids.teens_fill.parent.height)
-        self.__ids.settlers_fill.size = (stats['settlers_approval'],self.__ids.settlers_fill.parent.height)
+        self.__ids.baby_fill.size = (stats['baby_approval'],self.__ids.baby_fill.parent.height)
+        self.__ids.child_fill.size = (stats['child_approval'],self.__ids.child_fill.parent.height)
+        self.__ids.teen_fill.size = (stats['teen_approval'],self.__ids.teen_fill.parent.height)
+        self.__ids.settler_fill.size = (stats['settler_approval'],self.__ids.settler_fill.parent.height)
 
         self.__ids.planet_habitability.text = str(stats['planet_habitability']) + '%'
         self.__ids.year.text = str(stats['year'])
         self.__ids.day.text = str(stats['day'])
+        self.__ids.hour.text = str(stats['hour'])
 
+        self.__ids.surface_percentage.text = str(int(stats['ocean_percentage'] * 1.408450704225352)) + '%'
+        self.__ids.atmosphere_percentage.text = str(stats['atmosphere_percentage']) + '%'
         self.__ids.habitat_modules.text = str(stats['habitat_space_used']) + '/' + str(stats['habitat_modules'])
         self.__ids.greenhouse_modules.text = str(stats['greenhouse_space_used']) + '/' + str(stats['greenhouse_modules'])
 
+        self.__ids.ocean_fill.size = stats['ocean_percentage'], self.__ids.ocean_fill.parent.height
+        self.__ids.arable_fill.size = stats['arable_percentage'], self.__ids.arable_fill.parent.height
+        self.__ids.atmosphere_fill.size = stats['atmosphere_percentage'], self.__ids.atmosphere_fill.parent.height
         self.__ids.habitat_fill.size = (stats['habitat_condition'],self.__ids.habitat_fill.parent.height)
         self.__ids.greenhouse_fill.size = (stats['greenhouse_condition'],self.__ids.greenhouse_fill.parent.height)
 
+    # Converts the type and amount into readable text forms.
     def type_text_select(self,type,amt,cost_rwd):
 
         # Remove any Underscores.
@@ -324,11 +349,11 @@ class MainScreen(Screen):
         self.__type_text = self.__temp.title()
 
         # Set the unit, v if a cost, ^ if a reward, and E in any other case.
-        self.__unit = 'v' if cost_rwd == 'cost' else '^' if cost_rwd == 'rwd' else 'E'
+        self.__unit = '- ' if cost_rwd == 'cost' else '+' if cost_rwd == 'rwd' else 'Error'
 
         # Set the amount text depending on what percentage of the existing stat is being changed.
         if stats[type] == 0:
-            self.__amt_text = '-'
+            self.__amt_text = 'N/A'
         elif amt/stats[type] > 1:
             self.__amt_text = self.__unit * 5
         elif amt/stats[type] > .60 and amt / stats[type] <= 1:
@@ -343,3 +368,8 @@ class MainScreen(Screen):
             self.__amt_text = 'NONE'
 
         return self.__type_text, self.__amt_text
+
+
+def update_rect(instance, value):
+    instance.rect.pos = instance.pos
+    instance.rect.size = instance.size

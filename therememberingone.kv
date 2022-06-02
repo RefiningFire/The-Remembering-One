@@ -88,45 +88,45 @@
                 Label:
                     text: 'Babies:'
                 CountLabel:
-                    id: babies_count
-                    text: str(app.start_stats['babies_count'])
+                    id: baby_count
+                    text: str(app.start_stats['baby_count'])
                 MeterFrame:
                     MeterFill:
-                        id: babies_fill
-                        size: app.start_stats['babies_approval'], self.parent.height
+                        id: baby_fill
+                        size: app.start_stats['baby_approval'], self.parent.height
             CornerItemBox:
                 id: children
                 Label:
                     text: 'Children:'
                 CountLabel:
-                    id: children_count
-                    text: str(app.start_stats['children_count'])
+                    id: child_count
+                    text: str(app.start_stats['child_count'])
                 MeterFrame:
                     MeterFill:
-                        id: children_fill
-                        size: app.start_stats['children_approval'], self.parent.height
+                        id: child_fill
+                        size: app.start_stats['child_approval'], self.parent.height
             CornerItemBox:
                 id: teens
                 Label:
                     text: 'Teens:'
                 CountLabel:
-                    id: teens_count
-                    text: str(app.start_stats['teens_count'])
+                    id: teen_count
+                    text: str(app.start_stats['teen_count'])
                 MeterFrame:
                     MeterFill:
-                        id: teens_fill
-                        size: app.start_stats['teens_approval'], self.parent.height
+                        id: teen_fill
+                        size: app.start_stats['teen_approval'], self.parent.height
             CornerItemBox:
                 id: settlers
                 Label:
                     text: 'Settlers:'
                 CountLabel:
-                    id: settlers_count
-                    text: str(app.start_stats['settlers_count'])
+                    id: settler_count
+                    text: str(app.start_stats['settler_count'])
                 MeterFrame:
                     MeterFill:
-                        id: settlers_fill
-                        size: app.start_stats['settlers_approval'], self.parent.height
+                        id: settler_fill
+                        size: app.start_stats['settler_approval'], self.parent.height
 
         SideBox:
             id: status
@@ -159,6 +159,12 @@
                 Label:
                     id: day
                     text: str(app.start_stats['day'])
+            SideItemBox:
+                Label:
+                    text: 'Hour'
+                Label:
+                    id: hour
+                    text: str(app.start_stats['hour'])
 
         CornerBox:
             id: modules
