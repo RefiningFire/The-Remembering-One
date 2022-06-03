@@ -23,6 +23,7 @@ stats = {
     'female_farmer_count':5,'female_farmer_approval':50,
 
 
+    'scrap_metal':100,
 
     'module_patches':100,
 
@@ -51,6 +52,8 @@ stats = {
 sm = ScreenManager(transition=SlideTransition())
 
 main_deck = decks.starting.deck.copy()
+
+delayed_deck = []
 
 all_unused_cards = decks.terraforming.deck.copy() | decks.summer.deck.copy()
 

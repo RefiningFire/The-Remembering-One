@@ -4,7 +4,7 @@ deck = {
         'text':'This is the text of the first event.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':True,
+        'unique':True,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':['TRFM001'],
@@ -37,7 +37,7 @@ deck = {
         'text':'This is the text of the second event.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':True,
+        'unique':True,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':['SD003'],
@@ -70,7 +70,7 @@ deck = {
         'text':'This is the text of the third event.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':True,
+        'unique':True,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':['SD004'],
@@ -103,7 +103,7 @@ deck = {
         'text':'This is the text of the fourth event.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':True,
+        'unique':True,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':[''],

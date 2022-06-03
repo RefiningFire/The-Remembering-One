@@ -4,7 +4,7 @@ deck = {
             'text':'This is the text of the first Summer event.',
             'req_type_flr':[],'req_amt_flr':[],
             'req_type_cap':[],'req_amt_cap':[],
-            'unique':True,
+            'unique':True,'delay':0,'delay_chance':1,
             'options':{
                 'opt1':{
                     'text':'Option 1','new_cards':['SD002','SD003'],

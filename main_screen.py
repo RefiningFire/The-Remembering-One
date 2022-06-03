@@ -326,13 +326,18 @@ class MainScreen(Screen):
         else:
             self.__chosen_card_option = new_id
 
-        # Add new card to main_deck.
-        main_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
+        if all_unused_cards[self.__chosen_card_option]['delay'] > 0:
+            # Add the card to the delayed_deck.
+            delayed_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
+        else:
+            # Add new card to main_deck.
+            main_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
 
         # If the card is unique, remove it from the all_unused_cards pool.
-        if main_deck[self.__chosen_card_option]['unique'] == True:
+        if all_unused_cards[self.__chosen_card_option]['unique'] == True:
             # Remove the new card from the all_unused_cards pool.
             all_unused_cards.pop(self.__chosen_card_option)
+
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
@@ -455,9 +460,30 @@ def update_time(hours):
         stats['day'] += 1
         stats['age_in_earth_days'] += 1
 
+        delay_check(1)
+
     if stats['day'] > 7:
         stats['day'] -= (stats['day'] - 1)
         stats['year'] += 1
+
+        delay_check((365 - stats['day']))
+
+def delay_check(days):
+    # Decrease the delay count for cards in the delayed_deck.
+    for card in delayed_deck:
+
+        # If the card is ready, add it to the main_deck.
+        if delayed_deck[card]['delay'] <= 0:
+            main_deck[card] = delayed_deck[card]
+            delayed_deck.pop(card)
+        # If there is a chance the card will not delay, roll the dice.
+        elif delayed_deck[card]['delay_chance'] >= 2:
+            # If the random choice matches the odds, decrease the delay.
+            if random.randint(1,delayed_deck[card]['delay_chance']) == delayed_deck[card]['delay_chance']:
+                delayed_deck[card]['delay'] -= days
+        # If the card is not ready but has a delay chance of 1, automatically decrease its delay.
+        elif delayed_deck[card]['delay_chance'] == 1:
+            delayed_deck[card]['delay'] -= days
 
 # General function for updating a canvas after it has been added to another widget.
 def update_rect(instance, value):

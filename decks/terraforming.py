@@ -4,10 +4,10 @@ deck = {
         'text':'This is the text of the first terraforming event.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':False,
+        'unique':False,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
-                'text':'Option 1','new_cards':['TRFM002'],
+                'text':'Option 1','new_cards':['pytho'],
                 'cost_type':[],'cost_amt':[],
                 'rwd_type':[],'rwd_amt':[],
                 'req_type_flr':[],'req_amt_flr':[],
@@ -37,7 +37,7 @@ deck = {
         'text':'This is the text of the first terraforming events first variant.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':False,
+        'unique':False,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':['SD001'],
@@ -70,7 +70,7 @@ deck = {
         'text':'This is the text of the first terraforming events second variant.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
-        'unique':False,
+        'unique':False,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
                 'text':'Option 1','new_cards':['SD001'],
