@@ -14,6 +14,9 @@ from global_stats import *
 class MainScreen(Screen):
     # Increasing the stats.
     def recalculate_stats(self):
+        # Set new age of the player in years
+        stats['age'] = stats['age_in_earth_days'] // 365
+
         # Habitat space used is the total number of pops divided by 10, rounded up.
         stats['habitat_space_used']=math.ceil((
                             stats['male_baby_count'] +
@@ -310,21 +313,26 @@ class MainScreen(Screen):
 
     # Adds a card to the Main Deck.
     def add_card(self,new_id):
-        self.__cards_to_be_added = []
+        self.__potential_multiples = []
 
-        # Search for the new_id in the unused cards.
+        # Search for the new_id in the unused cards, add all variants to temp list.
         for card in all_unused_cards:
             if new_id in card:
-                self.__cards_to_be_added.append(card)
+                self.__potential_multiples.append(card)
 
-        for card in self.__cards_to_be_added:
-            # Add new card to main_deck.
-            main_deck[card] = all_unused_cards[card]
+        if len(self.__potential_multiples) > 0:
+            # Choose a card at random from the temp list.
+            self.__chosen_card_option = random.choice(self.__potential_multiples)
+        else:
+            self.__chosen_card_option = new_id
 
-            # If the card is unique, remove it from the all_unused_cards pool.
-            if main_deck[card]['unique'] == True:
-                # Remove the new card from the all_unused_cards pool.
-                all_unused_cards.pop(card)
+        # Add new card to main_deck.
+        main_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
+
+        # If the card is unique, remove it from the all_unused_cards pool.
+        if main_deck[self.__chosen_card_option]['unique'] == True:
+            # Remove the new card from the all_unused_cards pool.
+            all_unused_cards.pop(self.__chosen_card_option)
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
@@ -387,10 +395,11 @@ class MainScreen(Screen):
         self.__ids.male_farmer_fill.size = (stats['male_farmer_approval'],self.__ids.male_farmer_fill.parent.height)
         self.__ids.female_farmer_fill.size = (stats['female_farmer_approval'],self.__ids.female_farmer_fill.parent.height)
 
-        #self.__ids.planet_habitability.text = str(stats['planet_habitability']) + '%'
+
         self.__ids.year.text = str(stats['year'])
         self.__ids.day.text = str(stats['day'])
         self.__ids.hour.text = str(stats['hour'])
+        self.__ids.age.text = str(stats['age'])
 
         self.__ids.surface_percentage.text = str(int(stats['ocean_percentage'] * 1.408450704225352)) + '%'
         self.__ids.atmosphere_percentage.text = str(stats['atmosphere_percentage']) + '%'
@@ -437,16 +446,17 @@ class MainScreen(Screen):
 
         return self.__type_text, self.__amt_text
 
-# General function for updating the hours, days, and years.
+# General function for updating the hours, days, years, and age.
 def update_time(hours):
     stats['hour'] += hours
 
     while stats['hour'] >= 24:
         stats['hour'] -= 24
         stats['day'] += 1
+        stats['age_in_earth_days'] += 1
 
     if stats['day'] > 7:
-        stats['day'] = 1
+        stats['day'] -= (stats['day'] - 1)
         stats['year'] += 1
 
 # General function for updating a canvas after it has been added to another widget.

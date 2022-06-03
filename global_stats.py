@@ -24,13 +24,13 @@ stats = {
 
 
 
-
+    'module_patches':100,
 
     'habitat_modules':20,'habitat_condition':100,'habitat_space_used':10,
 
-    'greenhouse_modules':10,'greenhouse_condition':100,'greenhouse_space_used':2,'greenhouse_fertility':100,
+    'greenhouse_modules':10,'greenhouse_condition':100,'greenhouse_space_used':2,'greenhouse_fertility':55,'greenhouse_panels':10,
 
-    'food_reserves':500,'food_storage':1000,'food_production':200,'food_consumption':100,
+    'food_reserves':500,'food_storage':1000,'food_production':110,'food_consumption':100,
 
     'atmosphere_percentage':0,
     'ocean_percentage':0,'arable_percentage':0,
@@ -38,6 +38,7 @@ stats = {
     'year':0,
     'day':1,
     'hour':0,
+    'age':20,'age_in_earth_days':7300,
 
     'current_card_id':''
 }
