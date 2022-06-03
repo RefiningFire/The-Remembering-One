@@ -59,9 +59,9 @@
             size: 200, 100
             pos: self.parent.width/2-100,self.parent.height - 250
             Button:
-                text: 'Increase'
+                text: 'Draw'
                 on_press:
-                    root.increase()
+                    root.recalculate_stats()
                     root.draw_card()
                     root.load_buttons()
         BoxLayout:
@@ -74,7 +74,7 @@
                     root.discard_card()
         CornerBox:
             id: pops
-            size: 400, len(self.children)*50
+            size: 600, len(self.children)*50
             pos: 0, self.parent.height - self.height
             canvas:
                 Color:
@@ -84,53 +84,119 @@
                     pos: self.pos
                     radius: [0,0,30,0]
             CornerItemBox:
-                id: babies
+                id: male_babies
                 Label:
-                    text: 'Babies:'
+                    text: 'Male Babies:'
                 CountLabel:
-                    id: baby_count
-                    text: str(app.start_stats['baby_count'])
+                    id: male_baby_count
+                    text: str(app.start_stats['male_baby_count'])
                 MeterFrame:
                     MeterFill:
-                        id: baby_fill
-                        size: app.start_stats['baby_approval'], self.parent.height
+                        id: male_baby_fill
+                        size: app.start_stats['male_baby_approval'], self.parent.height
             CornerItemBox:
-                id: children
+                id: female_babies
                 Label:
-                    text: 'Children:'
+                    text: 'Female Babies:'
                 CountLabel:
-                    id: child_count
-                    text: str(app.start_stats['child_count'])
+                    id: female_baby_count
+                    text: str(app.start_stats['female_baby_count'])
                 MeterFrame:
                     MeterFill:
-                        id: child_fill
-                        size: app.start_stats['child_approval'], self.parent.height
+                        id: female_baby_fill
+                        size: app.start_stats['female_baby_approval'], self.parent.height
             CornerItemBox:
-                id: teens
+                id: male_children
                 Label:
-                    text: 'Teens:'
+                    text: 'Male Children:'
                 CountLabel:
-                    id: teen_count
-                    text: str(app.start_stats['teen_count'])
+                    id: male_child_count
+                    text: str(app.start_stats['male_child_count'])
                 MeterFrame:
                     MeterFill:
-                        id: teen_fill
-                        size: app.start_stats['teen_approval'], self.parent.height
+                        id: male_child_fill
+                        size: app.start_stats['male_child_approval'], self.parent.height
             CornerItemBox:
-                id: settlers
+                id: female_children
                 Label:
-                    text: 'Settlers:'
+                    text: 'Female Children:'
                 CountLabel:
-                    id: settler_count
-                    text: str(app.start_stats['settler_count'])
+                    id: female_child_count
+                    text: str(app.start_stats['female_child_count'])
                 MeterFrame:
                     MeterFill:
-                        id: settler_fill
-                        size: app.start_stats['settler_approval'], self.parent.height
+                        id: female_child_fill
+                        size: app.start_stats['female_child_approval'], self.parent.height
+            CornerItemBox:
+                id: male_teens
+                Label:
+                    text: 'Male Teens:'
+                CountLabel:
+                    id: male_teen_count
+                    text: str(app.start_stats['male_teen_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: male_teen_fill
+                        size: app.start_stats['male_teen_approval'], self.parent.height
+            CornerItemBox:
+                id: female_teens
+                Label:
+                    text: 'Female Teens:'
+                CountLabel:
+                    id: female_teen_count
+                    text: str(app.start_stats['female_teen_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: female_teen_fill
+                        size: app.start_stats['female_teen_approval'], self.parent.height
+            CornerItemBox:
+                id: male_settlers
+                Label:
+                    text: 'Male Settlers:'
+                CountLabel:
+                    id: male_settler_count
+                    text: str(app.start_stats['male_settler_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: male_settler_fill
+                        size: app.start_stats['male_settler_approval'], self.parent.height
+            CornerItemBox:
+                id: female_settlers
+                Label:
+                    text: 'Female Settlers:'
+                CountLabel:
+                    id: female_settler_count
+                    text: str(app.start_stats['female_settler_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: female_settler_fill
+                        size: app.start_stats['female_settler_approval'], self.parent.height
+            CornerItemBox:
+                id: male_farmers
+                Label:
+                    text: 'Male Farmers:'
+                CountLabel:
+                    id: male_farmer_count
+                    text: str(app.start_stats['male_farmer_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: male_farmer_fill
+                        size: app.start_stats['male_farmer_approval'], self.parent.height
+            CornerItemBox:
+                id: female_farmers
+                Label:
+                    text: 'Female Farmers:'
+                CountLabel:
+                    id: female_farmer_count
+                    text: str(app.start_stats['female_farmer_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: female_farmer_fill
+                        size: app.start_stats['female_farmer_approval'], self.parent.height
 
         SideBox:
             id: status
-            size: len(self.children)*200, 100
+            size: len(self.children)*115, 100
             pos: self.parent.width/2-self.width/2, self.parent.height-self.height
             canvas:
                 Color:
@@ -139,14 +205,6 @@
                     size: self.size
                     pos: self.pos
                     radius: [0,0,30,30]
-            BoxLayout:
-                orientation: 'vertical'
-                padding: [5]
-                Label:
-                    text: 'Planet Habitability'
-                Label:
-                    id: planet_habitability
-                    text: str(app.start_stats['planet_habitability']) + '%'
             SideItemBox:
                 Label:
                     text: 'Year'
@@ -168,7 +226,7 @@
 
         CornerBox:
             id: modules
-            size: 550, len(self.children)*50
+            size: 600, len(self.children)*50
             pos: self.parent.width-self.width, self.parent.height-self.height
             canvas:
                 Color:
@@ -255,6 +313,30 @@
                     MeterFill:
                         id: greenhouse_fill
                         size: app.start_stats['greenhouse_condition'], self.parent.height
+            CornerItemBox:
+                Label:
+                    text: 'Food Production/Reserves:'
+                CountLabel:
+                    id: food_production
+                    text: str(app.start_stats['food_production'] - app.start_stats['food_consumption'])
+                MeterFrame:
+                    canvas:
+                        Color:
+                            rgba: (0,0,0,1)
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos
+                            radius: [10,10,10,10]
+                    MeterFill:
+                        id: food_fill
+                        size: (app.start_stats['food_reserves']/app.start_stats['food_storage'])*100, self.parent.height
+                        canvas:
+                            Color:
+                                rgba: (.3,.3,.3,1)
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [5,5,5,5]
 
 
 
