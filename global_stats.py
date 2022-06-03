@@ -10,20 +10,33 @@ import galaxy_gen
 import numpy as np
 
 stats = {
-    'baby_count':0,'baby_approval':0,
-    'child_count':0,'child_approval':0,
-    'teen_count':0,'teen_approval':0,
-    'settler_count':100,'settler_approval':50,
+    'male_baby_count':0,'male_baby_approval':0,
+    'female_baby_count':0,'female_baby_approval':0,
+    'male_child_count':0,'male_child_approval':0,
+    'female_child_count':0,'female_child_approval':0,
+    'male_teen_count':0,'male_teen_approval':0,
+    'female_teen_count':0,'female_teen_approval':0,
+
+    'male_settler_count':45,'male_settler_approval':50,
+    'female_settler_count':45,'female_settler_approval':50,
+    'male_farmer_count':5,'male_farmer_approval':50,
+    'female_farmer_count':5,'female_farmer_approval':50,
+
+
+
+
 
     'habitat_modules':20,'habitat_condition':100,'habitat_space_used':10,
 
-    'greenhouse_modules':10,'greenhouse_condition':100,'greenhouse_space_used':10,
+    'greenhouse_modules':10,'greenhouse_condition':100,'greenhouse_space_used':2,'greenhouse_fertility':100,
 
-    'planet_habitability':0,'atmosphere_percentage':40,
-    'ocean_percentage':40,'arable_percentage':30,
+    'food_reserves':500,'food_storage':1000,'food_production':200,'food_consumption':100,
+
+    'atmosphere_percentage':0,
+    'ocean_percentage':0,'arable_percentage':0,
 
     'year':0,
-    'day':0,
+    'day':1,
     'hour':0,
 
     'current_card_id':''

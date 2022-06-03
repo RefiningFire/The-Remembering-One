@@ -12,35 +12,33 @@ from global_stats import *
 
 
 class MainScreen(Screen):
-    # Increasing the stat.
-    def increase(self):
-        #stats['settler_count'] += 5
-        stats['teen_count'] += 4
-        stats['child_count'] += 3
-        #stats['baby_count'] += 2
-
-        #stats['settler_approval'] += 5
-        stats['teen_approval'] += 4
-        stats['child_approval'] += 3
-        #stats['baby_approval'] += 2
-
-        stats['planet_habitability'] += 7
-        #stats['year'] += 1
-        #stats['day'] += 1
-        #stats['hour'] += 1
-
-        stats['habitat_modules'] += 0
-
-        stats['ocean_percentage'] += 1
-        stats['arable_percentage'] += 1
-        stats['atmosphere_percentage'] += 1
-
-        # Habitat free space is the number of pops divided by 10, rounded up.
+    # Increasing the stats.
+    def recalculate_stats(self):
+        # Habitat space used is the total number of pops divided by 10, rounded up.
         stats['habitat_space_used']=math.ceil((
-                            stats['settler_count'] +
-                            stats['teen_count'] + stats['child_count'] + stats['baby_count']) / 10)
+                            stats['male_baby_count'] +
+                            stats['female_baby_count'] +
+                            stats['male_child_count'] +
+                            stats['female_child_count'] +
+                            stats['male_teen_count'] +
+                            stats['female_teen_count'] +
 
-        stats['greenhouse_space_used'] -= 1
+                            stats['male_settler_count'] +
+                            stats['female_settler_count'] +
+                            stats['male_farmer_count'] +
+                            stats['female_farmer_count']) / 10)
+
+        # Greenhouse space used is the number of farmers divided by 5, rounded up.
+        stats['greenhouse_space_used']=math.ceil((
+                            stats['male_farmer_count'] +
+                            stats['female_farmer_count']) / 5)
+
+        # Food production is the number of greenhouse_space_used * greenhouse_condition as a percentage, times greenhouse_fertility.
+        stats['food_production']=math.ceil(
+                            stats['greenhouse_space_used'] *
+                            (stats['greenhouse_condition'] * .01) *
+                            stats['greenhouse_fertility'])
+
 
         #print(galaxy_stats[1,0,0,3]) # Planet 1, x 0, y 0, item 3
 
@@ -364,17 +362,32 @@ class MainScreen(Screen):
     def load_buttons(self):
         self.__ids = sm.get_screen('main').ids
 
-        self.__ids.baby_count.text = str(stats['baby_count'])
-        self.__ids.child_count.text = str(stats['child_count'])
-        self.__ids.teen_count.text = str(stats['teen_count'])
-        self.__ids.settler_count.text = str(stats['settler_count'])
+        self.__ids.male_baby_count.text = str(stats['male_baby_count'])
+        self.__ids.female_baby_count.text = str(stats['female_baby_count'])
+        self.__ids.male_child_count.text = str(stats['male_child_count'])
+        self.__ids.female_child_count.text = str(stats['female_child_count'])
+        self.__ids.male_teen_count.text = str(stats['male_teen_count'])
+        self.__ids.female_teen_count.text = str(stats['female_teen_count'])
 
-        self.__ids.baby_fill.size = (stats['baby_approval'],self.__ids.baby_fill.parent.height)
-        self.__ids.child_fill.size = (stats['child_approval'],self.__ids.child_fill.parent.height)
-        self.__ids.teen_fill.size = (stats['teen_approval'],self.__ids.teen_fill.parent.height)
-        self.__ids.settler_fill.size = (stats['settler_approval'],self.__ids.settler_fill.parent.height)
+        self.__ids.male_settler_count.text = str(stats['male_settler_count'])
+        self.__ids.female_settler_count.text = str(stats['female_settler_count'])
+        self.__ids.male_farmer_count.text = str(stats['male_farmer_count'])
+        self.__ids.female_farmer_count.text = str(stats['female_farmer_count'])
 
-        self.__ids.planet_habitability.text = str(stats['planet_habitability']) + '%'
+
+        self.__ids.male_baby_fill.size = (stats['male_baby_approval'],self.__ids.male_baby_fill.parent.height)
+        self.__ids.female_baby_fill.size = (stats['female_baby_approval'],self.__ids.female_baby_fill.parent.height)
+        self.__ids.male_child_fill.size = (stats['male_child_approval'],self.__ids.male_child_fill.parent.height)
+        self.__ids.female_child_fill.size = (stats['female_child_approval'],self.__ids.female_child_fill.parent.height)
+        self.__ids.male_teen_fill.size = (stats['male_teen_approval'],self.__ids.male_teen_fill.parent.height)
+        self.__ids.female_teen_fill.size = (stats['female_teen_approval'],self.__ids.female_teen_fill.parent.height)
+
+        self.__ids.male_settler_fill.size = (stats['male_settler_approval'],self.__ids.male_settler_fill.parent.height)
+        self.__ids.female_settler_fill.size = (stats['female_settler_approval'],self.__ids.female_settler_fill.parent.height)
+        self.__ids.male_farmer_fill.size = (stats['male_farmer_approval'],self.__ids.male_farmer_fill.parent.height)
+        self.__ids.female_farmer_fill.size = (stats['female_farmer_approval'],self.__ids.female_farmer_fill.parent.height)
+
+        #self.__ids.planet_habitability.text = str(stats['planet_habitability']) + '%'
         self.__ids.year.text = str(stats['year'])
         self.__ids.day.text = str(stats['day'])
         self.__ids.hour.text = str(stats['hour'])
@@ -384,11 +397,15 @@ class MainScreen(Screen):
         self.__ids.habitat_modules.text = str(stats['habitat_space_used']) + '/' + str(stats['habitat_modules'])
         self.__ids.greenhouse_modules.text = str(stats['greenhouse_space_used']) + '/' + str(stats['greenhouse_modules'])
 
+        self.__ids.food_production.text = str(stats['food_production'] - stats['food_consumption'])
+
         self.__ids.ocean_fill.size = stats['ocean_percentage'], self.__ids.ocean_fill.parent.height
         self.__ids.arable_fill.size = stats['arable_percentage'], self.__ids.arable_fill.parent.height
         self.__ids.atmosphere_fill.size = stats['atmosphere_percentage'], self.__ids.atmosphere_fill.parent.height
         self.__ids.habitat_fill.size = (stats['habitat_condition'],self.__ids.habitat_fill.parent.height)
         self.__ids.greenhouse_fill.size = (stats['greenhouse_condition'],self.__ids.greenhouse_fill.parent.height)
+
+        self.__ids.food_fill.size = ((stats['food_reserves']/stats['food_storage'])*100, self.__ids.food_fill.parent.height)
 
     # Converts the type and amount into readable text forms.
     def type_text_select(self,type,amt,cost_rwd):
