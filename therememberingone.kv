@@ -219,10 +219,10 @@
                     text: str(app.start_stats['day'])
             SideItemBox:
                 Label:
-                    text: 'Hour'
+                    text: 'Time'
                 Label:
-                    id: hour
-                    text: str(app.start_stats['hour'])
+                    id: current_time
+                    text: '0' + str(app.start_stats['hour']) + '0' + str(app.start_stats['minute'])
             SideItemBox:
                 Label:
                     text: 'Age'

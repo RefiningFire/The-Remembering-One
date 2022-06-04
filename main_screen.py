@@ -181,8 +181,11 @@ class MainScreen(Screen):
         # Convert the button to an f-string, so that variables can be inserted.
         self.__temp_button_text = dynamic_string(my_str=main_deck[stats['current_card_id']]['name'],stats=stats)
 
+        # Find the time of the option in hours:minutes.
+        self.__temp_time = minutes_to_hours(self.__options[self.__cur_opt]["time"])
+
         # Convert the button to an f-string, so that variables can be inserted.
-        self.__temp_button_text = dynamic_string(my_str=self.__options[self.__cur_opt]["text"],stats=stats).center(20) + '\n' + ('Hours: ' + str(self.__options[self.__cur_opt]["time"])).center(20)
+        self.__temp_button_text = dynamic_string(my_str=self.__options[self.__cur_opt]["text"],stats=stats).center(20) + '\n' + ('Time: ' + self.__temp_time).center(20)
 
         # The button that selects the current option.
         self.option_btn = Button(
@@ -333,11 +336,11 @@ class MainScreen(Screen):
             if new_id in card:
                 self.__potential_multiples.append(card)
 
-        if len(self.__potential_multiples) > 0:
-            # Choose a card at random from the temp list.
-            self.__chosen_card_option = random.choice(self.__potential_multiples)
-        else:
-            self.__chosen_card_option = new_id
+        if self.__potential_multiples == []:
+            return
+
+        # Choose a card at random from the temp list.
+        self.__chosen_card_option = random.choice(self.__potential_multiples)
 
         # Check for a delay stat.
         if all_unused_cards[self.__chosen_card_option]['delay'] > 0:
@@ -352,7 +355,6 @@ class MainScreen(Screen):
         if all_unused_cards[self.__chosen_card_option]['unique'] == True:
             # Remove the new card from the all_unused_cards pool.
             all_unused_cards.pop(self.__chosen_card_option)
-
 
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
@@ -418,8 +420,11 @@ class MainScreen(Screen):
 
         self.__ids.year.text = str(stats['year'])
         self.__ids.day.text = str(stats['day'])
-        self.__ids.hour.text = str(stats['hour'])
+        self.__ids.current_time.text = convert_to_military(stats['hour'],stats['minute'])
+
         self.__ids.age.text = str(stats['age'])
+
+
 
         self.__ids.surface_percentage.text = str(int(stats['ocean_percentage'] * 1.408450704225352)) + '%'
         self.__ids.atmosphere_percentage.text = str(stats['atmosphere_percentage']) + '%'
@@ -466,23 +471,34 @@ class MainScreen(Screen):
 
         return self.__type_text, self.__amt_text
 
-# General function for updating the hours, days, years, and age.
-def update_time(hours):
-    stats['hour'] += hours
+# General function for updating the minutes, hours, days, years, and age.
+def update_time(minutes):
+    stats['minute'] += minutes
+
+    while stats['minute'] >= 60:
+        stats['hour'] += 1
+        stats['minute'] -= 60
 
     while stats['hour'] >= 24:
-        stats['hour'] -= 24
         stats['day'] += 1
         stats['age_in_earth_days'] += 1
 
+        # Run the delay check function at 1 day.
         delay_check(1)
 
+        stats['hour'] -= 24
+
+
     if stats['day'] > 7:
-        stats['day'] -= (stats['day'] - 1)
         stats['year'] += 1
 
+        # Run the delay check function at 1 year minus the week.
         delay_check((365 - stats['day']))
 
+        stats['day'] -= (stats['day'] - 1)
+
+
+# Iterate through the delayed_deck and reduce the delay, if the card makes its own roll.
 def delay_check(days):
     # Decrease the delay count for cards in the delayed_deck.
     for card in delayed_deck:
@@ -508,3 +524,29 @@ def update_rect(instance, value):
 # For converting strings to f-strings.
 def dynamic_string(my_str, **kwargs):
     return my_str.format(**kwargs)
+
+# Converts minutes into minutes and hours, then runs the convert_to_military function.
+def minutes_to_hours(minutes):
+    __hours = 0
+    __minutes = minutes
+    while __minutes >= 60:
+        __hours += 1
+        __minutes -= 60
+
+    return (convert_to_military(__hours,__minutes))
+
+# Converts hours and minutes to military standard time.
+def convert_to_military(hours,minutes):
+    __hours = '00'
+    __minutes = '00'
+    if minutes <= 9:
+        __minutes = '0' + str(minutes)
+    else:
+        __minutes = str(minutes)
+
+    if hours <= 9:
+        __hours = '0' + str(hours)
+    else:
+        __hours = str(hours)
+
+    return (__hours + __minutes)
