@@ -1,13 +1,13 @@
 deck = {
 'SD001':{
-        'name':'The first event',
-        'text':'This is the text of the first event.',
+        'name':'The first event for {stats[player_name]}',
+        'text':'This is the text of the first event, for {stats[player_name]}, age: {stats[age]}.',
         'req_type_flr':[],'req_amt_flr':[],
         'req_type_cap':[],'req_amt_cap':[],
         'unique':True,'delay':0,'delay_chance':1,
         'options':{
             'opt1':{
-                'text':'Option 1','new_cards':['TRFM001'],
+                'text':'Option for {stats[player_name]}','new_cards':['TRFM001'],
                 'cost_type':[],'cost_amt':[],
                 'rwd_type':['food_production'],'rwd_amt':[10],
                 'req_type_flr':[],'req_amt_flr':[],

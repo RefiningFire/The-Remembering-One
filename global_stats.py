@@ -41,6 +41,10 @@ stats = {
     'hour':0,
     'age':20,'age_in_earth_days':7300,
 
+    'wake_time':6,'council_start':8,'council_end':18,'dinner_start':19,'dinner_end':20,'sleep_time':22,
+
+    'player_name':'John',
+
     'current_card_id':''
 }
 

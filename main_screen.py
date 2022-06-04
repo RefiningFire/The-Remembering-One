@@ -107,15 +107,22 @@ class MainScreen(Screen):
         self.current_card.canvas.add(Color(1,1,1,.5))
         self.current_card.canvas.add(Rectangle(pos=self.current_card.pos,size=(self.__card_width,self.__card_height)))
 
+        # Convert the title to an f-string, so that variables can be inserted.
+        self.__temp_title = dynamic_string(my_str=main_deck[stats['current_card_id']]['name'],stats=stats)
+
         # Card Title, and background.
-        self.title = Label(text=main_deck[stats['current_card_id']]['name'],font_size=80,size_hint=(1,.3))
+        self.title = Label(text=self.__temp_title,font_size=80,size_hint=(1,.3))
 
         with self.title.canvas.before:
             Color(.4,.4,.4)
             self.title.rect = Rectangle(pos=self.title.pos, size=self.title.size)
 
+
+        # Convert the text to an f-string, so that variables can be inserted.
+        self.__temp_text = dynamic_string(my_str=main_deck[stats['current_card_id']]['text'],stats=stats)
+
         # Card Text and background.
-        self.text = Label(text=main_deck[stats['current_card_id']]['text'])
+        self.text = Label(text=self.__temp_text)
 
         with self.text.canvas.before:
             Color(.4,.4,.4)
@@ -171,9 +178,15 @@ class MainScreen(Screen):
             Color(.4, .4, .4)
             self.option_layout.rect = Rectangle(pos=self.option_layout.pos, size=self.option_layout.size)
 
+        # Convert the button to an f-string, so that variables can be inserted.
+        self.__temp_button_text = dynamic_string(my_str=main_deck[stats['current_card_id']]['name'],stats=stats)
+
+        # Convert the button to an f-string, so that variables can be inserted.
+        self.__temp_button_text = dynamic_string(my_str=self.__options[self.__cur_opt]["text"],stats=stats).center(20) + '\n' + ('Hours: ' + str(self.__options[self.__cur_opt]["time"])).center(20)
+
         # The button that selects the current option.
         self.option_btn = Button(
-                            text=(f'{self.__options[self.__cur_opt]["text"]}\nHours: {self.__options[self.__cur_opt]["time"]}'),
+                            text=self.__temp_button_text,
                             size_hint=(1.3,1))
 
         # The cost and reward layouts.
@@ -326,12 +339,14 @@ class MainScreen(Screen):
         else:
             self.__chosen_card_option = new_id
 
+        # Check for a delay stat.
         if all_unused_cards[self.__chosen_card_option]['delay'] > 0:
             # Add the card to the delayed_deck.
             delayed_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
         else:
             # Add new card to main_deck.
             main_deck[self.__chosen_card_option] = all_unused_cards[self.__chosen_card_option]
+
 
         # If the card is unique, remove it from the all_unused_cards pool.
         if all_unused_cards[self.__chosen_card_option]['unique'] == True:
@@ -489,3 +504,7 @@ def delay_check(days):
 def update_rect(instance, value):
     instance.rect.pos = instance.pos
     instance.rect.size = instance.size
+
+# For converting strings to f-strings.
+def dynamic_string(my_str, **kwargs):
+    return my_str.format(**kwargs)
