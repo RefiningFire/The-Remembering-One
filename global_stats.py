@@ -17,10 +17,12 @@ stats = {
     'male_teen_count':0,'male_teen_approval':0,
     'female_teen_count':0,'female_teen_approval':0,
 
-    'male_settler_count':45,'male_settler_approval':50,
-    'female_settler_count':45,'female_settler_approval':50,
+    'male_settler_count':43,'male_settler_approval':50,
+    'female_settler_count':43,'female_settler_approval':50,
     'male_farmer_count':5,'male_farmer_approval':50,
     'female_farmer_count':5,'female_farmer_approval':50,
+    'male_engineer_count':2,'male_engineer_approval':50,
+    'female_engineer_count':2,'female_engineer_approval':50,
 
 
     'scrap_metal':100,
@@ -38,13 +40,14 @@ stats = {
 
     'year':0,
     'day':1,
-    'hour':0,
+    'hour':5,
     'minute':0,
     'age':20,'age_in_earth_days':7300,
 
     'wake_time':5,'breakfast_start':6,'breakfast_end':7,'council_start':8,'council_end':18,'dinner_start':19,'dinner_end':20,'sleep_time':22,
 
-    'player_name':'John',
+    'player_name':'John','stamina':20,
+    'pc_str':8,'pc_dex':8,'pc_int':8,'pc_wis':8,'pc_con':8,'pc_cha':8,
 
     'current_card_id':''
 }

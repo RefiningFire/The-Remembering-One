@@ -29,7 +29,9 @@ class MainScreen(Screen):
                             stats['male_settler_count'] +
                             stats['female_settler_count'] +
                             stats['male_farmer_count'] +
-                            stats['female_farmer_count']) / 10)
+                            stats['female_farmer_count'] +
+                            stats['male_engineer_count'] +
+                            stats['female_engineer_count']) / 10)
 
         # Greenhouse space used is the number of farmers divided by 5, rounded up.
         stats['greenhouse_space_used']=math.ceil((
@@ -403,6 +405,8 @@ class MainScreen(Screen):
         self.__ids.female_settler_count.text = str(stats['female_settler_count'])
         self.__ids.male_farmer_count.text = str(stats['male_farmer_count'])
         self.__ids.female_farmer_count.text = str(stats['female_farmer_count'])
+        self.__ids.male_engineer_count.text = str(stats['male_engineer_count'])
+        self.__ids.female_engineer_count.text = str(stats['female_engineer_count'])
 
 
         self.__ids.male_baby_fill.size = (stats['male_baby_approval'],self.__ids.male_baby_fill.parent.height)
@@ -416,6 +420,9 @@ class MainScreen(Screen):
         self.__ids.female_settler_fill.size = (stats['female_settler_approval'],self.__ids.female_settler_fill.parent.height)
         self.__ids.male_farmer_fill.size = (stats['male_farmer_approval'],self.__ids.male_farmer_fill.parent.height)
         self.__ids.female_farmer_fill.size = (stats['female_farmer_approval'],self.__ids.female_farmer_fill.parent.height)
+        self.__ids.male_engineer_fill.size = (stats['male_engineer_approval'],self.__ids.male_engineer_fill.parent.height)
+        self.__ids.female_engineer_fill.size = (stats['female_engineer_approval'],self.__ids.female_engineer_fill.parent.height)
+
 
 
         self.__ids.year.text = str(stats['year'])
@@ -496,7 +503,6 @@ def update_time(minutes):
         delay_check((365 - stats['day']))
 
         stats['day'] -= (stats['day'] - 1)
-
 
 # Iterate through the delayed_deck and reduce the delay, if the card makes its own roll.
 def delay_check(days):

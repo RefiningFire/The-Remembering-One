@@ -193,6 +193,28 @@
                     MeterFill:
                         id: female_farmer_fill
                         size: app.start_stats['female_farmer_approval'], self.parent.height
+            CornerItemBox:
+                id: male_engineers
+                Label:
+                    text: 'Male Engineers:'
+                CountLabel:
+                    id: male_engineer_count
+                    text: str(app.start_stats['male_engineer_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: male_engineer_fill
+                        size: app.start_stats['male_engineer_approval'], self.parent.height
+            CornerItemBox:
+                id: female_engineers
+                Label:
+                    text: 'Female Engineers:'
+                CountLabel:
+                    id: female_engineer_count
+                    text: str(app.start_stats['female_engineer_count'])
+                MeterFrame:
+                    MeterFill:
+                        id: female_engineer_fill
+                        size: app.start_stats['female_engineer_approval'], self.parent.height
 
         SideBox:
             id: status
