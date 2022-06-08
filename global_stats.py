@@ -8,6 +8,7 @@ import decks.terraforming
 import galaxy_gen
 
 import numpy as np
+import ast
 
 stats = {
     'male_baby_count':0,'male_baby_approval':0,
@@ -55,18 +56,123 @@ stats = {
 #galaxy_stats = galaxy_gen.stats_gen()
 #print(galaxy_stats)
 
+def opt_data_creation(i):
+    if i[4][0] == '[':
+        return ast.literal_eval(i[4])
+    elif i[4][0] in '0123456789' and i[4][-1]in '0123456789':
+        return int(i[4])
+    else:
+        return i[4]
+
+
+
+def make_deck(deck_file):
+    f = open(deck_file, "r").readlines()
+
+    f = [i.strip('\n').replace('"','').split('\t') for i in f]
+
+    # Create the dictionary.
+    d = {}
+
+    # Set counter to 0.
+    n = 0
+
+    # Tracks the number of lines to add. (each card has 64 lines, so after each pass 64 is added to x)
+    x = 0
+    for i in f:
+        # Create the name field.
+        if n == 0+x:
+            d.update({i[0]:{i[1]:i[2]}})
+
+        # Create the card meta_data
+        elif n > 0+x and n <= 8+x:
+            if i[2][0] == '[':
+                d[i[0]][i[1]] = ast.literal_eval(i[2])
+            else:
+                d[i[0]][i[1]] = i[2]
+
+            if n == 8+x:
+                d[i[0]]['options'] = {}
+                d[i[0]]['options']['opt1'] = {}
+
+        # opt1
+        elif n >= 9+x and n <= 19+x:
+            d[i[0]]['options']['opt1'][i[3]] = opt_data_creation(i)
+
+            if n == 19+x:
+                d[i[0]]['options']['opt2'] = {}
+
+        # opt2
+        elif n >= 20+x and n <= 30+x:
+            d[i[0]]['options']['opt2'][i[3]] = opt_data_creation(i)
+
+            if n == 30+x:
+                d[i[0]]['options']['opt3'] = {}
+
+        # opt3
+        elif n >= 31+x and n <= 41+x:
+            d[i[0]]['options']['opt3'][i[3]] = opt_data_creation(i)
+
+            if n == 41+x:
+                d[i[0]]['options']['opt4'] = {}
+
+        # opt4
+        elif n>= 42+x and n <= 52+x:
+            d[i[0]]['options']['opt4'][i[3]] = opt_data_creation(i)
+
+            if n == 52+x:
+                d[i[0]]['options']['opt5'] = {}
+
+        # opt5
+        elif n >= 53+x and n <= 63+x:
+            d[i[0]]['options']['opt5'][i[3]] = opt_data_creation(i)
+
+        if i == ['']:
+            x += 65
+
+        n += 1
+
+    return d
+
 
 
 sm = ScreenManager(transition=SlideTransition())
 
+'''
 main_deck = decks.starting.deck.copy()
+'''
+
+main_deck = make_deck('card_data.tsv')
+
+print(main_deck)
+print()
 
 delayed_deck = []
 
 all_unused_cards = decks.terraforming.deck.copy() | decks.summer.deck.copy()
+
+print(all_unused_cards)
+
 
 # Create an empty dictionary that will hold all_used_cards.
 all_used_cards = {}
 
 # Create the 'on deck' deck, where cards go once selected, but before actually added to the main deck.
 to_be_added = {}
+
+
+
+
+
+
+
+
+'''
+for i in f[1:]:
+    if i[1] not in d[i[0]]:
+        d[i[0]][i[1]] = i[2:]
+    else:
+        d[i[0]][i[1]].extend(i[2:])
+
+print(d)
+'''

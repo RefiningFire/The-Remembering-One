@@ -1,0 +1,194 @@
+SD001-01	name	The first event for {stats[player_name]}		
+SD001-01	text	"This is the text of the first event, for {stats[player_name]}, age: {stats[age]}."		
+SD001-01	req_type_flr	[]		
+SD001-01	req_amt_flr	[]		
+SD001-01	req_type_cap	[]		
+SD001-01	req_amt_cap	[]		
+SD001-01	unique	TRUE		
+SD001-01	delay	0		
+SD001-01	delay_chance	1		
+SD001-01	options	opt1	text	Option for {stats[player_name]}
+SD001-01	options	opt1	new_cards	"['TRFM001','TRFM002']"
+SD001-01	options	opt1	cost_type	[]
+SD001-01	options	opt1	cost_amt	[]
+SD001-01	options	opt1	rwd_type	['food_production']
+SD001-01	options	opt1	rwd_amt	[10]
+SD001-01	options	opt1	req_type_flr	[]
+SD001-01	options	opt1	req_amt_flr	[]
+SD001-01	options	opt1	req_type_cap	[]
+SD001-01	options	opt1	req_amt_cap	[]
+SD001-01	options	opt1	time	1
+SD001-01	options	opt2 	text	Option 2
+SD001-01	options	opt2 	new_cards	[]
+SD001-01	options	opt2 	cost_type	[]
+SD001-01	options	opt2 	cost_amt	[]
+SD001-01	options	opt2 	rwd_type	[]
+SD001-01	options	opt2 	rwd_amt	[]
+SD001-01	options	opt2 	req_type_flr	[]
+SD001-01	options	opt2 	req_amt_flr	[]
+SD001-01	options	opt2 	req_type_cap	[]
+SD001-01	options	opt2 	req_amt_cap	[]
+SD001-01	options	opt2 	time	1
+SD001-01	options	opt3	text	Option 3
+SD001-01	options	opt3	new_cards	[]
+SD001-01	options	opt3	cost_type	[]
+SD001-01	options	opt3	cost_amt	[]
+SD001-01	options	opt3	rwd_type	[]
+SD001-01	options	opt3	rwd_amt	[]
+SD001-01	options	opt3	req_type_flr	[]
+SD001-01	options	opt3	req_amt_flr	[]
+SD001-01	options	opt3	req_type_cap	[]
+SD001-01	options	opt3	req_amt_cap	[]
+SD001-01	options	opt3	time	1
+SD001-01	options	opt4	text	Option 4
+SD001-01	options	opt4	new_cards	[]
+SD001-01	options	opt4	cost_type	[]
+SD001-01	options	opt4	cost_amt	[]
+SD001-01	options	opt4	rwd_type	[]
+SD001-01	options	opt4	rwd_amt	[]
+SD001-01	options	opt4	req_type_flr	[]
+SD001-01	options	opt4	req_amt_flr	[]
+SD001-01	options	opt4	req_type_cap	[]
+SD001-01	options	opt4	req_amt_cap	[]
+SD001-01	options	opt4	time	1
+SD001-01	options	opt5	text	Option 5
+SD001-01	options	opt5	new_cards	[]
+SD001-01	options	opt5	cost_type	[]
+SD001-01	options	opt5	cost_amt	[]
+SD001-01	options	opt5	rwd_type	[]
+SD001-01	options	opt5	rwd_amt	[]
+SD001-01	options	opt5	req_type_flr	[]
+SD001-01	options	opt5	req_amt_flr	[]
+SD001-01	options	opt5	req_type_cap	[]
+SD001-01	options	opt5	req_amt_cap	[]
+SD001-01	options	opt5	time	1
+
+SD002-01	name	The first event for {stats[player_name]}		
+SD002-01	text	"This is the text of the second event, for {stats[player_name]}, age: {stats[age]}."		
+SD002-01	req_type_flr	[]		
+SD002-01	req_amt_flr	[]		
+SD002-01	req_type_cap	[]		
+SD002-01	req_amt_cap	[]		
+SD002-01	unique	TRUE		
+SD002-01	delay	0		
+SD002-01	delay_chance	1		
+SD002-01	options	opt1	text	Option for {stats[player_name]}
+SD002-01	options	opt1	new_cards	"['TRFM001','TRFM002']"
+SD002-01	options	opt1	cost_type	[]
+SD002-01	options	opt1	cost_amt	[]
+SD002-01	options	opt1	rwd_type	['food_production']
+SD002-01	options	opt1	rwd_amt	[10]
+SD002-01	options	opt1	req_type_flr	[]
+SD002-01	options	opt1	req_amt_flr	[]
+SD002-01	options	opt1	req_type_cap	[]
+SD002-01	options	opt1	req_amt_cap	[]
+SD002-01	options	opt1	time	1
+SD002-01	options	opt2 	text	Option 2
+SD002-01	options	opt2 	new_cards	[]
+SD002-01	options	opt2 	cost_type	[]
+SD002-01	options	opt2 	cost_amt	[]
+SD002-01	options	opt2 	rwd_type	[]
+SD002-01	options	opt2 	rwd_amt	[]
+SD002-01	options	opt2 	req_type_flr	[]
+SD002-01	options	opt2 	req_amt_flr	[]
+SD002-01	options	opt2 	req_type_cap	[]
+SD002-01	options	opt2 	req_amt_cap	[]
+SD002-01	options	opt2 	time	1
+SD002-01	options	opt3	text	Option 3
+SD002-01	options	opt3	new_cards	[]
+SD002-01	options	opt3	cost_type	[]
+SD002-01	options	opt3	cost_amt	[]
+SD002-01	options	opt3	rwd_type	[]
+SD002-01	options	opt3	rwd_amt	[]
+SD002-01	options	opt3	req_type_flr	[]
+SD002-01	options	opt3	req_amt_flr	[]
+SD002-01	options	opt3	req_type_cap	[]
+SD002-01	options	opt3	req_amt_cap	[]
+SD002-01	options	opt3	time	1
+SD002-01	options	opt4	text	Option 4
+SD002-01	options	opt4	new_cards	[]
+SD002-01	options	opt4	cost_type	[]
+SD002-01	options	opt4	cost_amt	[]
+SD002-01	options	opt4	rwd_type	[]
+SD002-01	options	opt4	rwd_amt	[]
+SD002-01	options	opt4	req_type_flr	[]
+SD002-01	options	opt4	req_amt_flr	[]
+SD002-01	options	opt4	req_type_cap	[]
+SD002-01	options	opt4	req_amt_cap	[]
+SD002-01	options	opt4	time	1
+SD002-01	options	opt5	text	Option 5
+SD002-01	options	opt5	new_cards	[]
+SD002-01	options	opt5	cost_type	[]
+SD002-01	options	opt5	cost_amt	[]
+SD002-01	options	opt5	rwd_type	[]
+SD002-01	options	opt5	rwd_amt	[]
+SD002-01	options	opt5	req_type_flr	[]
+SD002-01	options	opt5	req_amt_flr	[]
+SD002-01	options	opt5	req_type_cap	[]
+SD002-01	options	opt5	req_amt_cap	[]
+SD002-01	options	opt5	time	1
+
+SD003-01	name	The third event for {stats[player_name]}		
+SD003-01	text	"This is the text of the first event, for {stats[player_name]}, age: {stats[age]}."		
+SD003-01	req_type_flr	[]		
+SD003-01	req_amt_flr	[]		
+SD003-01	req_type_cap	[]		
+SD003-01	req_amt_cap	[]		
+SD003-01	unique	TRUE		
+SD003-01	delay	0		
+SD003-01	delay_chance	1		
+SD003-01	options	opt1	text	Option for {stats[player_name]}
+SD003-01	options	opt1	new_cards	"['TRFM001','TRFM002']"
+SD003-01	options	opt1	cost_type	[]
+SD003-01	options	opt1	cost_amt	[]
+SD003-01	options	opt1	rwd_type	['food_production']
+SD003-01	options	opt1	rwd_amt	[10]
+SD003-01	options	opt1	req_type_flr	[]
+SD003-01	options	opt1	req_amt_flr	[]
+SD003-01	options	opt1	req_type_cap	[]
+SD003-01	options	opt1	req_amt_cap	[]
+SD003-01	options	opt1	time	1
+SD003-01	options	opt2 	text	Option 2
+SD003-01	options	opt2 	new_cards	[]
+SD003-01	options	opt2 	cost_type	[]
+SD003-01	options	opt2 	cost_amt	[]
+SD003-01	options	opt2 	rwd_type	[]
+SD003-01	options	opt2 	rwd_amt	[]
+SD003-01	options	opt2 	req_type_flr	[]
+SD003-01	options	opt2 	req_amt_flr	[]
+SD003-01	options	opt2 	req_type_cap	[]
+SD003-01	options	opt2 	req_amt_cap	[]
+SD003-01	options	opt2 	time	1
+SD003-01	options	opt3	text	Option 3
+SD003-01	options	opt3	new_cards	[]
+SD003-01	options	opt3	cost_type	[]
+SD003-01	options	opt3	cost_amt	[]
+SD003-01	options	opt3	rwd_type	[]
+SD003-01	options	opt3	rwd_amt	[]
+SD003-01	options	opt3	req_type_flr	[]
+SD003-01	options	opt3	req_amt_flr	[]
+SD003-01	options	opt3	req_type_cap	[]
+SD003-01	options	opt3	req_amt_cap	[]
+SD003-01	options	opt3	time	1
+SD003-01	options	opt4	text	Option 4
+SD003-01	options	opt4	new_cards	[]
+SD003-01	options	opt4	cost_type	[]
+SD003-01	options	opt4	cost_amt	[]
+SD003-01	options	opt4	rwd_type	[]
+SD003-01	options	opt4	rwd_amt	[]
+SD003-01	options	opt4	req_type_flr	[]
+SD003-01	options	opt4	req_amt_flr	[]
+SD003-01	options	opt4	req_type_cap	[]
+SD003-01	options	opt4	req_amt_cap	[]
+SD003-01	options	opt4	time	1
+SD003-01	options	opt5	text	Option 5
+SD003-01	options	opt5	new_cards	[]
+SD003-01	options	opt5	cost_type	[]
+SD003-01	options	opt5	cost_amt	[]
+SD003-01	options	opt5	rwd_type	[]
+SD003-01	options	opt5	rwd_amt	[]
+SD003-01	options	opt5	req_type_flr	[]
+SD003-01	options	opt5	req_amt_flr	[]
+SD003-01	options	opt5	req_type_cap	[]
+SD003-01	options	opt5	req_amt_cap	[]
+SD003-01	options	opt5	time	1
