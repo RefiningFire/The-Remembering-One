@@ -99,41 +99,32 @@ def make_deck(deck_file):
 
         # Check for the option's tag, and create the sub-dictionary..
         elif row[0] == 'options':
-            # Variant counter.
-            v = 0
-            for variant in row[1:]:
+            for i, variant in enumerate(row[1:]):
                 # Update the current variant with the options sub-dictionary.
-                d[ids[v]].update({'options':{}})
-                v+=1
+                d[ids[i]].update({'options':{}})
 
             cur_sec = 'options'
 
         # Create each meta_data line.
         elif cur_sec == 'meta_data':
-            v = 0
-            for data in row[1:]:
+            for i, data in enumerate(row[1:]):
                 # Update the current variant with the current meta_data.
-                d[ids[v]].update({row[0]:data_type(data)})
-                v+=1
+                d[ids[i]].update({row[0]:data_type(data)})
 
         # Check for any opt#, and create the sub-dicitonary.
         elif row[0] == 'opt1' or row[0] == 'opt2' or row[0] == 'opt3' or row[0] == 'opt4' or row[0] == 'opt5':
-            v = 0
-            for variant in row[1:]:
+            for i, variant in enumerate(row[1:]):
                 # Update the current variant with the opt# sub-dictionary.
-                d[ids[v]]['options'].update({row[0]:{}})
-                v+=1
+                d[ids[i]]['options'].update({row[0]:{}})
 
             # Set the current section as the current opt #.
             cur_sec = row[0]
 
         # Create each option data line.
         elif cur_sec == 'opt1' or cur_sec == 'opt2' or cur_sec == 'opt3' or cur_sec == 'opt4' or cur_sec == 'opt5':
-            v = 0
-            for data in row[1:]:
+            for i, data in enumerate(row[1:]):
                 # Update the current opt# with the current data.
-                d[ids[v]]['options'][cur_sec].update({row[0]:data_type(data)})
-                v+=1
+                d[ids[i]]['options'][cur_sec].update({row[0]:data_type(data)})
     return d
 
 sm = ScreenManager(transition=SlideTransition())
