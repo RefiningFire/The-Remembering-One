@@ -1,0 +1,71 @@
+ID	SD003-01	SD003-02	SD003-03
+name	"The third event, variant 1 for {stats[player_name]}"	"The third event, variant 2 for {stats[player_name]}"	"The third event, variant 3 for {stats[player_name]}"
+text	"This is the text of the first event, for {stats[player_name]}, age: {stats[age]}."	"This is the text of the first event, for {stats[player_name]}, age: {stats[age]}."	"This is the text of the first event, for {stats[player_name]}, age: {stats[age]}."
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+unique	TRUE	TRUE	TRUE
+delay	0	0	0
+delay_chance	1	1	1
+options			
+opt1			
+text	Option for {stats[player_name]}	Option for {stats[player_name]}	Option for {stats[player_name]}
+new_cards	"['TRFM001','TRFM002']"	"['TRFM001','TRFM002']"	"['TRFM001','TRFM002']"
+cost_type	[]	[]	[]
+cost_amt	[]	[]	[]
+rwd_type	['food_production']	['food_production']	['food_production']
+rwd_amt	[10]	[10]	[10]
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+time	1	1	1
+opt2			
+text	Option 2	Option 2	Option 2
+new_cards	[]	[]	[]
+cost_type	[]	[]	[]
+cost_amt	[]	[]	[]
+rwd_type	[]	[]	[]
+rwd_amt	[]	[]	[]
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+time	1	1	1
+opt3			
+text	Option 3	Option 3	Option 3
+new_cards	[]	[]	[]
+cost_type	[]	[]	[]
+cost_amt	[]	[]	[]
+rwd_type	[]	[]	[]
+rwd_amt	[]	[]	[]
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+time	1	1	1
+opt4			
+text	Option 4	Option 4	Option 4
+new_cards	[]	[]	[]
+cost_type	[]	[]	[]
+cost_amt	[]	[]	[]
+rwd_type	[]	[]	[]
+rwd_amt	[]	[]	[]
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+time	1	1	1
+opt5			
+text	Option 5	Option 5	Option 5
+new_cards	[]	[]	[]
+cost_type	[]	[]	[]
+cost_amt	[]	[]	[]
+rwd_type	[]	[]	[]
+rwd_amt	[]	[]	[]
+req_type_flr	[]	[]	[]
+req_amt_flr	[]	[]	[]
+req_type_cap	[]	[]	[]
+req_amt_cap	[]	[]	[]
+time	1	1	1

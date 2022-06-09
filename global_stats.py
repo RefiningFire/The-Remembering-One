@@ -56,15 +56,17 @@ stats = {
 #galaxy_stats = galaxy_gen.stats_gen()
 #print(galaxy_stats)
 
-def opt_data_creation(i):
-    if i[4][0] == '[':
-        return ast.literal_eval(i[4])
-    elif i[4][0] in '0123456789' and i[4][-1]in '0123456789':
-        return int(i[4])
-    else:
-        return i[4]
-
-
+# This function sets the appropriate data type for card data.
+def data_type(data):
+    # List.
+    if data[0] == '[':return ast.literal_eval(data)
+    # Boolean
+    elif data.lower() == 'true': return True
+    elif data.lower() == 'false': return False
+    # Integer
+    elif data[0] in '0123456789' and data[-1]in '0123456789': return int(data)
+    # Other: should be string.
+    else:return data
 
 def make_deck(deck_file):
     f = open(deck_file, "r").readlines()
@@ -77,81 +79,80 @@ def make_deck(deck_file):
     # Set counter to 0.
     n = 0
 
-    # Tracks the number of lines to add. (each card has 64 lines, so after each pass 64 is added to x)
+    # Tracks the number of lines to add. (each card_type has 64 lines, so after each pass 64 is added to x)
     x = 0
-    for i in f:
-        # Create the name field.
-        if n == 0+x:
-            d.update({i[0]:{i[1]:i[2]}})
 
-        # Create the card meta_data
-        elif n > 0+x and n <= 8+x:
-            if i[2][0] == '[':
-                d[i[0]][i[1]] = ast.literal_eval(i[2])
-            else:
-                d[i[0]][i[1]] = i[2]
+    # This list will be populated by the card variant id's and used to populate their data.
+    ids = []
 
-            if n == 8+x:
-                d[i[0]]['options'] = {}
-                d[i[0]]['options']['opt1'] = {}
+    # iterate through each row.
+    for row in f:
 
-        # opt1
-        elif n >= 9+x and n <= 19+x:
-            d[i[0]]['options']['opt1'][i[3]] = opt_data_creation(i)
+        # Find the number of card variants.
+        card_variant_count = len(row) - 1
 
-            if n == 19+x:
-                d[i[0]]['options']['opt2'] = {}
+        # Add the card variant sub-dictionaries.
+        if row[0] == 'ID':
+            for id in row[1:]:
+                d.update({id:{}})
+                ids.append(id)
 
-        # opt2
-        elif n >= 20+x and n <= 30+x:
-            d[i[0]]['options']['opt2'][i[3]] = opt_data_creation(i)
+            # Set a current section variable as meta_data.
+            cur_sec = 'meta_data'
 
-            if n == 30+x:
-                d[i[0]]['options']['opt3'] = {}
+        # Check for the option's tag, and create the sub-dictionary..
+        elif row[0] == 'options':
+            # Variant counter.
+            v = 0
+            for variant in row[1:]:
+                # Update the current variant with the options sub-dictionary.
+                d[ids[v]].update({'options':{}})
+                v+=1
 
-        # opt3
-        elif n >= 31+x and n <= 41+x:
-            d[i[0]]['options']['opt3'][i[3]] = opt_data_creation(i)
+            cur_sec = 'options'
 
-            if n == 41+x:
-                d[i[0]]['options']['opt4'] = {}
+        # Create each meta_data line.
+        elif cur_sec == 'meta_data':
+            v = 0
+            for data in row[1:]:
+                # Update the current variant with the current meta_data.
+                d[ids[v]].update({row[0]:data_type(data)})
+                v+=1
 
-        # opt4
-        elif n>= 42+x and n <= 52+x:
-            d[i[0]]['options']['opt4'][i[3]] = opt_data_creation(i)
+        # Check for any opt#, and create the sub-dicitonary.
+        elif row[0] == 'opt1' or row[0] == 'opt2' or row[0] == 'opt3' or row[0] == 'opt4' or row[0] == 'opt5':
+            v = 0
+            for variant in row[1:]:
+                # Update the current variant with the opt# sub-dictionary.
+                d[ids[v]]['options'].update({row[0]:{}})
+                v+=1
 
-            if n == 52+x:
-                d[i[0]]['options']['opt5'] = {}
+            # Set the current section as the current opt #.
+            cur_sec = row[0]
 
-        # opt5
-        elif n >= 53+x and n <= 63+x:
-            d[i[0]]['options']['opt5'][i[3]] = opt_data_creation(i)
-
-        if i == ['']:
-            x += 65
-
-        n += 1
-
+        # Create each option data line.
+        elif cur_sec == 'opt1' or cur_sec == 'opt2' or cur_sec == 'opt3' or cur_sec == 'opt4' or cur_sec == 'opt5':
+            v = 0
+            for data in row[1:]:
+                # Update the current opt# with the current data.
+                d[ids[v]]['options'][cur_sec].update({row[0]:data_type(data)})
+                v+=1
     return d
-
-
 
 sm = ScreenManager(transition=SlideTransition())
 
+
+main_deck = make_deck('card_data_master_2.tsv')
 '''
-main_deck = decks.starting.deck.copy()
+all_unused_cards = make_deck('terraforming_deck.tsv')
+
+all_unused_cards.update(make_deck('summer_deck.tsv'))
 '''
-
-main_deck = make_deck('card_data.tsv')
-
-print(main_deck)
-print()
-
 delayed_deck = []
+
 
 all_unused_cards = decks.terraforming.deck.copy() | decks.summer.deck.copy()
 
-print(all_unused_cards)
 
 
 # Create an empty dictionary that will hold all_used_cards.
@@ -159,20 +160,3 @@ all_used_cards = {}
 
 # Create the 'on deck' deck, where cards go once selected, but before actually added to the main deck.
 to_be_added = {}
-
-
-
-
-
-
-
-
-'''
-for i in f[1:]:
-    if i[1] not in d[i[0]]:
-        d[i[0]][i[1]] = i[2:]
-    else:
-        d[i[0]][i[1]].extend(i[2:])
-
-print(d)
-'''
