@@ -89,8 +89,7 @@ def make_deck(deck_file):
             for id in row[1:]:
                 d.update({id:{}})
                 ids.append(id)
-
-            # Set a current section variable as meta_data.
+            # Set the current section variable as meta_data.
             cur_sec = 'meta_data'
 
         # If at the space between cards, reset the ids list to prep for a new card type.
@@ -102,7 +101,7 @@ def make_deck(deck_file):
             for i, variant in enumerate(row[1:]):
                 # Update the current variant with the options sub-dictionary.
                 d[ids[i]].update({'options':{}})
-
+            # set the current section as options.
             cur_sec = 'options'
 
         # Create each meta_data line.
@@ -116,12 +115,11 @@ def make_deck(deck_file):
             for i, variant in enumerate(row[1:]):
                 # Update the current variant with the opt# sub-dictionary.
                 d[ids[i]]['options'].update({row[0]:{}})
-
             # Set the current section as the current opt #.
             cur_sec = row[0]
 
-        # Create each option data line.
-        elif cur_sec == 'opt1' or cur_sec == 'opt2' or cur_sec == 'opt3' or cur_sec == 'opt4' or cur_sec == 'opt5':
+
+        else: # Create each option data line.
             for i, data in enumerate(row[1:]):
                 # Update the current opt# with the current data.
                 d[ids[i]]['options'][cur_sec].update({row[0]:data_type(data)})
@@ -131,7 +129,6 @@ sm = ScreenManager(transition=SlideTransition())
 
 
 main_deck = make_deck('card_data_master_2.tsv')
-print(main_deck)
 '''
 all_unused_cards = make_deck('terraforming_deck.tsv')
 
