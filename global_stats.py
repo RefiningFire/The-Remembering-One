@@ -76,18 +76,11 @@ def make_deck(deck_file):
     # Create the dictionary.
     d = {}
 
-    # Set counter to 0.
-    n = 0
-
-    # Tracks the number of lines to add. (each card_type has 64 lines, so after each pass 64 is added to x)
-    x = 0
-
     # This list will be populated by the card variant id's and used to populate their data.
     ids = []
 
     # iterate through each row.
     for row in f:
-
         # Find the number of card variants.
         card_variant_count = len(row) - 1
 
@@ -99,6 +92,10 @@ def make_deck(deck_file):
 
             # Set a current section variable as meta_data.
             cur_sec = 'meta_data'
+
+        # If at the space between cards, reset the ids list to prep for a new card type.
+        elif row == ['']:
+            ids = []
 
         # Check for the option's tag, and create the sub-dictionary..
         elif row[0] == 'options':
@@ -143,6 +140,7 @@ sm = ScreenManager(transition=SlideTransition())
 
 
 main_deck = make_deck('card_data_master_2.tsv')
+print(main_deck)
 '''
 all_unused_cards = make_deck('terraforming_deck.tsv')
 
