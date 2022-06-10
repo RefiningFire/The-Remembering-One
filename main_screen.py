@@ -61,13 +61,15 @@ class MainScreen(Screen):
 
             # Check for any floor stats not met.
             for i in range(len(main_deck[card]['req_type_flr'])):
-                if stats[main_deck[card]['req_type_flr'][i]] < main_deck[card]['req_amt_flr'][i]:
+                if stats[main_deck[card]['req_type_flr'][i]] < int(dynamic_string(main_deck[card]['req_amt_flr'][i],stats=stats)):
                     self.__card_drawable = False
                     break
+                #int(dynamic_string(my_str=str(main_deck[card]['req_amt_flr'][i]),stats=stats))
+
 
             # Check for any cap stats exceeded.
             for i in range(len(main_deck[card]['req_type_cap'])):
-                if stats[main_deck[card]['req_type_cap'][i]] > main_deck[card]['req_amt_cap'][i]:
+                if stats[main_deck[card]['req_type_cap'][i]] > int(dynamic_string(main_deck[card]['req_amt_cap'][i],stats=stats)):
                     self.__card_drawable = False
                     break
 
@@ -529,7 +531,10 @@ def update_rect(instance, value):
 
 # For converting strings to f-strings.
 def dynamic_string(my_str, **kwargs):
-    return my_str.format(**kwargs)
+    if type(my_str) is str:
+        return my_str.format(**kwargs)
+    else:
+        return my_str
 
 # Converts minutes into minutes and hours, then runs the convert_to_military function.
 def minutes_to_hours(minutes):

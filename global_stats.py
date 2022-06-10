@@ -58,8 +58,10 @@ stats = {
 
 # This function sets the appropriate data type for card data.
 def data_type(data):
+    # Check for empty field.
+    if data == '': return ast.literal_eval('[]')
     # List.
-    if data[0] == '[':return ast.literal_eval(data)
+    elif data[0] == '[':return ast.literal_eval(data)
     # Boolean
     elif data.lower() == 'true': return True
     elif data.lower() == 'false': return False
@@ -69,9 +71,8 @@ def data_type(data):
     else:return data
 
 def make_deck(deck_file):
-    f = open(deck_file, "r").readlines()
-
-    f = [i.strip('\n').replace('"','').split('\t') for i in f]
+    # Import dictionary, and make a list for each line.
+    f = [i.strip('\n').replace('"','').split('\t') for i in open(deck_file, "r").readlines()]
 
     # Create the dictionary.
     d = {}
@@ -125,12 +126,11 @@ def make_deck(deck_file):
 sm = ScreenManager(transition=SlideTransition())
 
 
-main_deck = make_deck('card_data_master_2.tsv')
-'''
-all_unused_cards = make_deck('terraforming_deck.tsv')
+main_deck = make_deck('decks/greenhouse.tsv')
 
-all_unused_cards.update(make_deck('summer_deck.tsv'))
-'''
+#all_unused_cards = make_deck('decks/greenhouse.tsv')
+#all_unused_cards.update(make_deck('summer_deck.tsv'))
+
 delayed_deck = []
 
 
