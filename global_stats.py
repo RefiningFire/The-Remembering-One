@@ -111,30 +111,35 @@ def make_deck(deck_file):
         # Check for any opt#, and create the sub-dicitonary.
         elif row[0] == 'opt1' or row[0] == 'opt2' or row[0] == 'opt3' or row[0] == 'opt4' or row[0] == 'opt5':
             for i, variant in enumerate(row[1:]):
-                # Update the current variant with the opt# sub-dictionary.
-                d[ids[i]]['options'].update({row[0]:{}})
+                # Check that the card has this option.
+                if variant != '':
+                    # Update the current variant with the opt# sub-dictionary.
+                    d[ids[i]]['options'].update({row[0]:{}})
+                    # Update the current opt# text field with the current data.
+                    d[ids[i]]['options'][row[0]].update({'text':data_type(variant)})
+
             # Set the current section as the current opt #.
             cur_sec = row[0]
 
 
         else: # Create each option data line.
             for i, data in enumerate(row[1:]):
-                # Update the current opt# with the current data.
-                d[ids[i]]['options'][cur_sec].update({row[0]:data_type(data)})
+                if cur_sec in d[ids[i]]['options']:
+                    # Update the current opt# with the current data.
+                    d[ids[i]]['options'][cur_sec].update({row[0]:data_type(data)})
+
     return d
 
 sm = ScreenManager(transition=SlideTransition())
 
 
-main_deck = make_deck('decks/greenhouse.tsv')
+main_deck = make_deck('decks/starting.tsv')
+main_deck.update(make_deck('decks/greenhouse.tsv'))
 
-#all_unused_cards = make_deck('decks/greenhouse.tsv')
+all_unused_cards = make_deck('decks/utility.tsv')
 #all_unused_cards.update(make_deck('summer_deck.tsv'))
 
 delayed_deck = []
-
-
-all_unused_cards = decks.terraforming.deck.copy() | decks.summer.deck.copy()
 
 
 

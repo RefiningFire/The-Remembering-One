@@ -77,18 +77,25 @@ class MainScreen(Screen):
             if self.__card_drawable == True:
                 self.__possible_draws.append(card)
 
-        # Set iter and selected card variables
-        self.__selected_card = random.randint(1,len(self.__possible_draws))
-        self.__card_draw_iter = 1
+        # Check for at least one card in the possible draws list.
+        if len(self.__possible_draws) > 0:
+            # Set iter and selected card variables
+            self.__selected_card = random.randint(1,len(self.__possible_draws))
+            self.__card_draw_iter = 1
 
-        # Iterate through the main deck until the randomly selected number is found.
-        for card in self.__possible_draws:
-            if self.__card_draw_iter == self.__selected_card:
-                # Set drawn card id.
-                stats['current_card_id'] = card
-                break
+            # Iterate through the main deck until the randomly selected number is found.
+            for card in self.__possible_draws:
+                if self.__card_draw_iter == self.__selected_card:
+                    # Set drawn card id.
+                    stats['current_card_id'] = card
+                    break
 
-            self.__card_draw_iter += 1
+                self.__card_draw_iter += 1
+
+        # Display the no card available at this time card.
+        else:
+            stats['current_card_id'] = 'NONEDRAWN'
+            self.add_card('NONEDRAWN')
 
         # Short link to the main screen Float Layout
         self.__parent = sm.get_screen('main').ids.pops.parent
@@ -327,7 +334,7 @@ class MainScreen(Screen):
         if main_deck[stats['current_card_id']]['unique'] == True:
             # Copy this card to the all_used_cards pool.
             all_used_cards[stats['current_card_id']] = main_deck[stats['current_card_id']]
-
+            
         # Remove this card from the main deck.
         main_deck.pop(stats['current_card_id'])
 

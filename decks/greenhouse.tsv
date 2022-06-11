@@ -2,15 +2,14 @@ ID	GRRNHS001-01	GRRNHS001-02	GRRNHS001-03	GRRNHS001-04
 name	Cracked Greenhouse panel	Greenhouse Structural Damage	A Bountiful Greenhouse Module	Unusual plant in a greenhouse
 text	One of our Greenhouses has a panel showing some growing cracks. What should we do?	"There is a Greenhouse support that was accidentally damaged by a farmer over this last year. The damage appears minor, though there is no way of telling. Even small structural damage to planetary modules can lead to catastrophic failure if left untended. "	"Over the past year, this particular Greenhouse has produced an extra 100 food! What shall we do with the surplus?"	"We’ve found an odd plant growing among our crops; it appears to be the only one, and it’s unlike anything our farmer’s know of."
 req_type_flr	"['greenhouse_modules','hour']"	"['greenhouse_modules','hour']"	"['greenhouse_modules','hour']"	"['greenhouse_modules','hour']"
-req_amt_flr	"[1,'{stats[council_end]}']"	"[1,'{stats[council_end]}']"	"[1,'{stats[council_end]}']"	"[1,'{stats[council_end]}']"
+req_amt_flr	"[1,'{stats[council_start]}']"	"[1,'{stats[council_start]}']"	"[1,'{stats[council_start]}']"	"[1,'{stats[council_start]}']"
 req_type_cap	['hour']	['hour']	['hour']	['hour']
 req_amt_cap	['{stats[council_end]}']	['{stats[council_end]}']	['{stats[council_end]}']	['{stats[council_end]}']
 unique	FALSE	FALSE	FALSE	FALSE
 delay	0	0	0	0
 delay_chance	1	1	1	1
 options				
-opt1				
-text	"Leave it be, we can’t afford to worry about it right now."	"It’s find, there’s no need to worry about it."	Put it into the reserves.	"Destroy it, we can’t risk contamination."
+opt1	"Leave it be, we can’t afford to worry about it right now."	"It’s find, there’s no need to worry about it."	Put it into the reserves.	"Destroy it, we can’t risk contamination."
 new_cards	['GRNHS002']	['GRNHS004']	['FOOD001']	[]
 new_delay	[0]	[0]	[0]	[]
 cost_type	"['greenhouse_condition','farmer_approval']"	"['greenhouse_condition','farmer_approval']"	['farmer_approval']	[]
@@ -22,8 +21,7 @@ req_amt_flr	[]	[]	[]	[]
 req_type_cap	[]	[]	[]	[]
 req_amt_cap	[]	[]	[]	[]
 time	1	1	1	1
-opt2				
-text	Patch it up.	Let me take a look at it.	Let’s have a feast tonight!	"Isolate it in a spare greenhouse, and let’s see what it grows into."
+opt2	Patch it up.	Let me take a look at it.	Let’s have a feast tonight!	"Isolate it in a spare greenhouse, and let’s see what it grows into."
 new_cards	[]	['GRNHS005']	['FOOD002']	['ALFLRA001']
 new_delay	[]	['instant']	['{stats[council_end]}']	[]
 cost_type	['module_patches']	['stamina']	['farmer_approval']	"['farmer_approval','greenhouse_modules']"
@@ -35,8 +33,7 @@ req_amt_flr	"[1,1]"	[1]	[]	['{greenhouse_space_used}']
 req_type_cap	[]	[]	[]	[]
 req_amt_cap	[]	[]	[]	[]
 time	1	60	1	1
-opt3				
-text	Replace it immediately.	Have it repaired.	"Distribute it to the Farmers, they’ve earned it."	"Let it grow, it can’t be any kind of harm."
+opt3	Replace it immediately.	Have it repaired.	"Distribute it to the Farmers, they’ve earned it."	"Let it grow, it can’t be any kind of harm."
 new_cards	[]	[]	['FOOD003']	['ALFLRA002']
 new_delay	[]	[]	[0]	[0]
 cost_type	['greenhouse_panels']	['scrap_metal']	['settler_approval']	"['farmer_approval','settler_approval']"
@@ -48,8 +45,7 @@ req_amt_flr	"[1,1]"	"[5,1]"	[1]	[]
 req_type_cap	[]	[]	[]	[]
 req_amt_cap	[]	[]	[]	[]
 time	1	1	1	1
-opt4				
-text	[]		"Put… most of it into the reserves. But what do you think of a nice dinner tonight, eh Councillors?"	Let me see it for myself.
+opt4	[]		"Put… most of it into the reserves. But what do you think of a nice dinner tonight, eh Councillors?"	Let me see it for myself.
 new_cards			['FOOD004']	['ALFLRA003']
 new_delay			[0]	['instant']
 cost_type			"['farmer_approval','settler_approval']"	['stamina']
@@ -62,7 +58,6 @@ req_type_cap			[]	[]
 req_amt_cap			[]	[]
 time			2	60
 opt5				
-text				
 new_cards				
 new_delay				
 cost_type				

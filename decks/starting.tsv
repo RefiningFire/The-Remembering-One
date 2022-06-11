@@ -9,8 +9,7 @@ unique	TRUE	TRUE	TRUE
 delay	0	0	0
 delay_chance	1	1	1
 options			
-opt1			
-text	Option for {stats[player_name]}	Option for {stats[player_name]}	Option for {stats[player_name]}
+opt1	Option for {stats[player_name]}	Option for {stats[player_name]}	Option for {stats[player_name]}
 new_cards	"['TRFM001','TRFM002']"	"['TRFM001','TRFM002']"	"['TRFM001','TRFM002']"
 cost_type	[]	[]	[]
 cost_amt	[]	[]	[]
@@ -21,8 +20,7 @@ req_amt_flr	[]	[]	[]
 req_type_cap	[]	[]	[]
 req_amt_cap	[]	[]	[]
 time	1	1	1
-opt2			
-text	Option 2	Option 2	Option 2
+opt2	Option 2	Option 2	Option 2
 new_cards	[]	[]	[]
 cost_type	[]	[]	[]
 cost_amt	[]	[]	[]
@@ -33,8 +31,7 @@ req_amt_flr	[]	[]	[]
 req_type_cap	[]	[]	[]
 req_amt_cap	[]	[]	[]
 time	1	1	1
-opt3			
-text	Option 3	Option 3	Option 3
+opt3	Option 3	Option 3	Option 3
 new_cards	[]	[]	[]
 cost_type	[]	[]	[]
 cost_amt	[]	[]	[]
@@ -45,8 +42,7 @@ req_amt_flr	[]	[]	[]
 req_type_cap	[]	[]	[]
 req_amt_cap	[]	[]	[]
 time	1	1	1
-opt4			
-text	Option 4	Option 4	Option 4
+opt4	Option 4	Option 4	Option 4
 new_cards	[]	[]	[]
 cost_type	[]	[]	[]
 cost_amt	[]	[]	[]
@@ -57,8 +53,7 @@ req_amt_flr	[]	[]	[]
 req_type_cap	[]	[]	[]
 req_amt_cap	[]	[]	[]
 time	1	1	1
-opt5			
-text	Option 5	Option 5	Option 5
+opt5	Option 5	Option 5	Option 5
 new_cards	[]	[]	[]
 cost_type	[]	[]	[]
 cost_amt	[]	[]	[]

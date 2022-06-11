@@ -1,0 +1,66 @@
+ID	NONEDRAWN
+name	No event’s
+text	There are no events or decisions at this time. How long would you like to wait?
+req_type_flr	[]
+req_amt_flr	[]
+req_type_cap	[]
+req_amt_cap	[]
+unique	FALSE
+delay	0
+delay_chance	1
+options	
+opt1	15 Minutes
+new_cards	[]
+cost_type	[]
+cost_amt	[]
+rwd_type	[]
+rwd_amt	[]
+req_type_flr	[]
+req_amt_flr	[]
+req_type_cap	[]
+req_amt_cap	[]
+time	15
+opt2	Thirty Minutes
+new_cards	[]
+cost_type	[]
+cost_amt	[]
+rwd_type	[]
+rwd_amt	[]
+req_type_flr	[]
+req_amt_flr	[]
+req_type_cap	[]
+req_amt_cap	[]
+time	30
+opt3	One Hour
+new_cards	[]
+cost_type	[]
+cost_amt	[]
+rwd_type	[]
+rwd_amt	[]
+req_type_flr	[]
+req_amt_flr	[]
+req_type_cap	[]
+req_amt_cap	[]
+time	60
+opt4	
+new_cards	
+cost_type	
+cost_amt	
+rwd_type	
+rwd_amt	
+req_type_flr	
+req_amt_flr	
+req_type_cap	
+req_amt_cap	
+time	
+opt5	
+new_cards	
+cost_type	
+cost_amt	
+rwd_type	
+rwd_amt	
+req_type_flr	
+req_amt_flr	
+req_type_cap	
+req_amt_cap	
+time	
