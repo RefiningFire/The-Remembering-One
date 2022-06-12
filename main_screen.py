@@ -225,7 +225,7 @@ class MainScreen(Screen):
             self.__cost_amt = self.__options[self.__cur_opt]['cost_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text  = self.type_text_select(self.__cost_type,self.__cost_amt,'cost')
+            self.__type_text,self.__amt_text,self.__selected_stats  = self.type_text_select(self.__cost_type,self.__cost_amt,'cost')
 
             # Save the option type and amt to the button so they can change.
             self.cur_opt_cost_type.append(self.__cost_type)
@@ -264,7 +264,7 @@ class MainScreen(Screen):
             self.__rwd_amt = self.__options[self.__cur_opt]['rwd_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text  = self.type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
+            self.__type_text,self.__amt_text,self.__selected_stats  = self.type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
 
             # Save the reward type and amt to the button so they can change.
             self.cur_opt_rwd_type.append(self.__rwd_type)
@@ -334,7 +334,7 @@ class MainScreen(Screen):
         if main_deck[stats['current_card_id']]['unique'] == True:
             # Copy this card to the all_used_cards pool.
             all_used_cards[stats['current_card_id']] = main_deck[stats['current_card_id']]
-            
+
         # Remove this card from the main deck.
         main_deck.pop(stats['current_card_id'])
 
@@ -457,6 +457,39 @@ class MainScreen(Screen):
 
         self.__ids.food_fill.size = ((stats['food_reserves']/stats['food_storage'])*100, self.__ids.food_fill.parent.height)
 
+    # From an option text, finds all stat types that could fit. i.e. 'farmer_count' fits 'male_farmer_count' and 'female_farmer_count'
+    def find_stat_types(self,type):
+        # Add each character to the current keyword list index. Create a new index and empty list item if the character is '_'
+        for char in type:
+            if char == '_':
+                self.__i += 1
+                self.__keywords.append('')
+            else:
+                self.__keywords[self.__i] += char
+
+        # Search through every stat name.
+        for key in stats.keys():
+            self.__check = 0
+            self.__total = 0
+            self.__selected_stats = []
+            # Check if all required keywords are in that stat name.
+            for keyword in self.__keywords:
+                # If any keyword is not in the stat move to the keyword check verification, which will effectly proceed to the next key.
+                if keyword not in key:
+                    break
+                # Add the selected stat to the selected stats list.
+                else:
+                    self.__check += 1
+                    self.__selected_stats.append(key)
+
+            # Verify that all keywords were in the key.
+            if self.__check == len(self.__keywords):
+                # Add the sum of all selected stats.
+                for each in self.__selected_stats:
+                    self.__total += stats[each]
+
+        return self.__selected_stats,self.__total
+
     # Converts the type and amount into readable text forms.
     def type_text_select(self,type,amt,cost_rwd):
 
@@ -469,23 +502,30 @@ class MainScreen(Screen):
         # Set the unit, v if a cost, ^ if a reward, and E in any other case.
         self.__unit = '- ' if cost_rwd == 'cost' else '+' if cost_rwd == 'rwd' else 'Error'
 
-        # Set the amount text depending on what percentage of the existing stat is being changed.
-        if stats[type] == 0:
+
+        # Set initial keywords list to one empty string, and the index to 0.
+        self.__keywords = ['']
+        self.__i = 0
+
+        self.__selected_stats,self.__total = self.find_stat_types(type)
+
+        # Set the amount text depending on what percentage of the existing stats are being changed.
+        if self.__total == 0:
             self.__amt_text = 'N/A'
-        elif amt/stats[type] > 1:
+        elif amt/self.__total  > 1:
             self.__amt_text = self.__unit * 5
-        elif amt/stats[type] > .60 and amt / stats[type] <= 1:
+        elif amt/self.__total  > .60 and amt/self.__total  <= 1:
             self.__amt_text = self.__unit * 4
-        elif amt/stats[type] > .30 and amt / stats[type] <= .60:
+        elif amt/self.__total  > .30 and amt/self.__total  <= .60:
             self.__amt_text = self.__unit * 3
-        elif amt/stats[type] > .10 and amt / stats[type] <= .30:
+        elif amt/self.__total  > .10 and amt/self.__total  <= .30:
             self.__amt_text = self.__unit * 2
-        elif amt/stats[type] > 0 and amt / stats[type] <= .10:
+        elif amt/self.__total  > 0 and amt/self.__total  <= .10:
             self.__amt_text = self.__unit * 1
         else:
             self.__amt_text = 'NONE'
 
-        return self.__type_text, self.__amt_text
+        return self.__type_text, self.__amt_text, self.__selected_stats
 
 # General function for updating the minutes, hours, days, years, and age.
 def update_time(minutes):
