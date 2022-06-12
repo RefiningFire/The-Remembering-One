@@ -133,11 +133,21 @@ def make_deck(deck_file):
 sm = ScreenManager(transition=SlideTransition())
 
 
+<<<<<<< HEAD
 main_deck = make_deck('decks/starting.tsv')
 main_deck.update(make_deck('decks/greenhouse.tsv'))
+=======
+<<<<<<< HEAD
+main_deck = make_deck('decks/greenhouse.tsv')
+>>>>>>> 1aa78a7aa2871566f665c709fc32105f3a9b1fb2
 
 all_unused_cards = make_deck('decks/utility.tsv')
 #all_unused_cards.update(make_deck('summer_deck.tsv'))
+=======
+main_deck = make_deck('card_data_master_2.tsv')
+'''
+all_unused_cards = make_deck('terraforming_deck.tsv')
+>>>>>>> cbb21a9d62af65624ad49558342acce465e4d6d5
 
 delayed_deck = []
 
