@@ -120,7 +120,11 @@ class MainScreen(Screen):
         self.__temp_title = dynamic_string(my_str=main_deck[stats['current_card_id']]['name'],stats=stats)
 
         # Card Title, and background.
-        self.title = Label(text=self.__temp_title,font_size=80,size_hint=(1,.3))
+        self.title = Label( text=self.__temp_title,
+                            text_size=(self.current_card.width - 10,(self.current_card.height*.2) - 10),
+                            halign='center',valign='middle',
+                            size_hint=(1,.3),
+                            font_size=70)
 
         with self.title.canvas.before:
             Color(.4,.4,.4)
@@ -130,7 +134,10 @@ class MainScreen(Screen):
         self.__temp_text = dynamic_string(my_str=main_deck[stats['current_card_id']]['text'],stats=stats)
 
         # Card Text and background.
-        self.text = Label(text=self.__temp_text)
+        self.text = Label(  text=self.__temp_text,
+                            text_size=(self.current_card.width-10,(self.current_card.height*.2) - 10),
+                            halign='center',valign='middle',
+                            font_size=40)
 
         with self.text.canvas.before:
             Color(.4,.4,.4)
@@ -206,11 +213,14 @@ class MainScreen(Screen):
         self.__temp_time = minutes_to_hours(self.__options[self.__cur_opt]["time"])
 
         # Convert the button to an f-string, so that variables can be inserted.
-        self.__temp_button_text = dynamic_string(my_str=self.__options[self.__cur_opt]["text"],stats=stats).center(20) + '\n' + ('Time: ' + self.__temp_time).center(20)
+        self.__temp_button_text = dynamic_string(my_str=self.__options[self.__cur_opt]["text"],stats=stats) + '\n' + ('Time: ' + self.__temp_time)
 
         # The button that selects the current option.
         self.option_btn = Button(
                             text=self.__temp_button_text,
+                            text_size=(self.option_layout.width*3.4,self.option_layout.height*2),
+                            halign='center',valign='middle',
+                            font_size=24,
                             size_hint=(1.3,1))
 
         # The cost and reward layouts.
@@ -243,7 +253,8 @@ class MainScreen(Screen):
 
             # Add a label for each cost.
             self.option_cost = Label(
-                        text=self.__type_text + ': ' + self.__amt_text)
+                        text=self.__type_text + ': ' + self.__amt_text,
+                        font_size=25)
 
             # Add the label to the cost layout.
             self.option_cost_layout.add_widget(self.option_cost)
@@ -282,7 +293,8 @@ class MainScreen(Screen):
 
             # Add a label for each reward.
             self.option_reward = Label(
-                        text=self.__type_text + ': ' + self.__amt_text)
+                        text=self.__type_text + ': ' + self.__amt_text,
+                        font_size=24)
 
             # Add the label to the reward layout.
             self.option_reward_layout.add_widget(self.option_reward)
