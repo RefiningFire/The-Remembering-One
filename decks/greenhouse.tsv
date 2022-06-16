@@ -9,7 +9,7 @@ unique	FALSE	FALSE	FALSE	FALSE
 delay	0	0	0	0
 delay_chance	1	1	1	1
 options				
-opt1	"Leave it be, we can’t afford to worry about it right now."	"It’s find, there’s no need to worry about it."	Put it into the reserves.	"Destroy it, we can’t risk contamination."
+opt1	"Leave it be, we can’t afford to worry about it right now."	"It’s fine, there’s no need to worry about it."	Put it into the reserves.	"Destroy it, we can’t risk contamination."
 new_cards	['GRNHS002']	['GRNHS004']	['FOOD001']	[]
 new_delay	[0]	[0]	[0]	[]
 cost_type	"['greenhouse_condition','farmer_approval']"	"['greenhouse_condition','farmer_approval']"	['farmer_approval']	[]
@@ -29,7 +29,7 @@ cost_amt	[1]	[1]	[5]	"[2,1]"
 rwd_type	[]	['farmer_approval']	['settler_approval']	[]
 rwd_amt	[]	[3]	[10]	[]
 req_type_flr	"['module_patches','farmer_count']"	['stamina']	[]	['greenhouse_modules']
-req_amt_flr	"[1,1]"	[1]	[]	['{greenhouse_space_used}']
+req_amt_flr	"[1,1]"	[1]	[]	['{stats[greenhouse_space_used]}']
 req_type_cap	[]	[]	[]	[]
 req_amt_cap	[]	[]	[]	[]
 time	1	60	1	1
@@ -45,7 +45,7 @@ req_amt_flr	"[1,1]"	"[5,1]"	[1]	[]
 req_type_cap	[]	[]	[]	[]
 req_amt_cap	[]	[]	[]	[]
 time	1	1	1	1
-opt4	[]		"Put… most of it into the reserves. But what do you think of a nice dinner tonight, eh Councillors?"	Let me see it for myself.
+opt4			"Put… most of it into the reserves. But what do you think of a nice dinner tonight, eh Councillors?"	Let me see it for myself.
 new_cards			['FOOD004']	['ALFLRA003']
 new_delay			[0]	['instant']
 cost_type			"['farmer_approval','settler_approval']"	['stamina']

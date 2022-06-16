@@ -64,8 +64,6 @@ class MainScreen(Screen):
                 if stats[main_deck[card]['req_type_flr'][i]] < int(dynamic_string(main_deck[card]['req_amt_flr'][i],stats=stats)):
                     self.__card_drawable = False
                     break
-                #int(dynamic_string(my_str=str(main_deck[card]['req_amt_flr'][i]),stats=stats))
-
 
             # Check for any cap stats exceeded.
             for i in range(len(main_deck[card]['req_type_cap'])):
@@ -128,7 +126,6 @@ class MainScreen(Screen):
             Color(.4,.4,.4)
             self.title.rect = Rectangle(pos=self.title.pos, size=self.title.size)
 
-
         # Convert the text to an f-string, so that variables can be inserted.
         self.__temp_text = dynamic_string(my_str=main_deck[stats['current_card_id']]['text'],stats=stats)
 
@@ -157,13 +154,26 @@ class MainScreen(Screen):
 
             # Check for any option floor stats not met.
             for i in range(len(self.__options[self.__cur_opt]['req_type_flr'])):
-                if stats[self.__options[self.__cur_opt]['req_type_flr'][i]] < self.__options[self.__cur_opt]['req_amt_flr'][i]:
+
+                # Find the stat types and average value for the Floor stats..
+                self.__floor_types, self.__floor_types_avg = find_stat_types(self.__options[self.__cur_opt]['req_type_flr'][i],include_avg=True)
+
+                # Make sure the floor amount is an integer.
+                self.__floor_amt = int(dynamic_string(self.__options[self.__cur_opt]['req_amt_flr'][i],stats=stats))
+
+                # If the average of all fitting stats is less than the required floor, do not display the card.
+                if self.__floor_types_avg < self.__floor_amt:
                     self.__display_option = False
                     break
 
             # Check for any option cap stats exceeded.
             for i in range(len(self.__options[self.__cur_opt]['req_type_cap'])):
-                if stats[self.__options[self.__cur_opt]['req_type_cap'][i]] > self.__options[self.__cur_opt]['req_amt_cap'][i]:
+
+                # Find the stat types and average value for the Cap stats.
+                self.__cap_types, self.__cap_types_avg = find_stat_types(self.__options[self.__cur_opt]['req_type_flr'][i],include_avg=True)
+
+                # If the average of all fitting stats is greater than the required cap, do not display the card.
+                if self.__cap_types_avg > self.__options[self.__cur_opt]['req_amt_cap'][i]:
                     self.__display_option = False
                     break
 
@@ -225,7 +235,7 @@ class MainScreen(Screen):
             self.__cost_amt = self.__options[self.__cur_opt]['cost_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text,self.__selected_stats  = self.type_text_select(self.__cost_type,self.__cost_amt,'cost')
+            self.__type_text,self.__amt_text,self.__selected_stats  = type_text_select(self.__cost_type,self.__cost_amt,'cost')
 
             # Save the option type and amt to the button so they can change.
             self.cur_opt_cost_type.append(self.__cost_type)
@@ -264,7 +274,7 @@ class MainScreen(Screen):
             self.__rwd_amt = self.__options[self.__cur_opt]['rwd_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text,self.__selected_stats  = self.type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
+            self.__type_text,self.__amt_text,self.__selected_stats  = type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
 
             # Save the reward type and amt to the button so they can change.
             self.cur_opt_rwd_type.append(self.__rwd_type)
@@ -457,75 +467,84 @@ class MainScreen(Screen):
 
         self.__ids.food_fill.size = ((stats['food_reserves']/stats['food_storage'])*100, self.__ids.food_fill.parent.height)
 
-    # From an option text, finds all stat types that could fit. i.e. 'farmer_count' fits 'male_farmer_count' and 'female_farmer_count'
-    def find_stat_types(self,type):
-        # Add each character to the current keyword list index. Create a new index and empty list item if the character is '_'
-        for char in type:
-            if char == '_':
-                self.__i += 1
-                self.__keywords.append('')
-            else:
-                self.__keywords[self.__i] += char
+# From an option text, returns all stat types (and their sum) that fall under the category of the option text. i.e. 'farmer_count' includes 'male_farmer_count' and 'female_farmer_count'
+def find_stat_types(type,include_avg=False):
+    # Set initial keywords list to one empty string, and the index to 0.
+    __keywords = ['']
+    __i = 0
 
-        # Search through every stat name.
-        for key in stats.keys():
-            self.__check = 0
-            self.__total = 0
-            self.__selected_stats = []
-            # Check if all required keywords are in that stat name.
-            for keyword in self.__keywords:
-                # If any keyword is not in the stat move to the keyword check verification, which will effectly proceed to the next key.
-                if keyword not in key:
-                    break
-                # Add the selected stat to the selected stats list.
-                else:
-                    self.__check += 1
-                    self.__selected_stats.append(key)
-
-            # Verify that all keywords were in the key.
-            if self.__check == len(self.__keywords):
-                # Add the sum of all selected stats.
-                for each in self.__selected_stats:
-                    self.__total += stats[each]
-
-        return self.__selected_stats,self.__total
-
-    # Converts the type and amount into readable text forms.
-    def type_text_select(self,type,amt,cost_rwd):
-
-        # Remove any Underscores.
-        self.__temp = type.replace('_',' ')
-
-        # Capitalize each word.
-        self.__type_text = self.__temp.title()
-
-        # Set the unit, v if a cost, ^ if a reward, and E in any other case.
-        self.__unit = '- ' if cost_rwd == 'cost' else '+' if cost_rwd == 'rwd' else 'Error'
-
-
-        # Set initial keywords list to one empty string, and the index to 0.
-        self.__keywords = ['']
-        self.__i = 0
-
-        self.__selected_stats,self.__total = self.find_stat_types(type)
-
-        # Set the amount text depending on what percentage of the existing stats are being changed.
-        if self.__total == 0:
-            self.__amt_text = 'N/A'
-        elif amt/self.__total  > 1:
-            self.__amt_text = self.__unit * 5
-        elif amt/self.__total  > .60 and amt/self.__total  <= 1:
-            self.__amt_text = self.__unit * 4
-        elif amt/self.__total  > .30 and amt/self.__total  <= .60:
-            self.__amt_text = self.__unit * 3
-        elif amt/self.__total  > .10 and amt/self.__total  <= .30:
-            self.__amt_text = self.__unit * 2
-        elif amt/self.__total  > 0 and amt/self.__total  <= .10:
-            self.__amt_text = self.__unit * 1
+    # Add each character to the current keyword list index. Create a new index and empty list item if the character is '_'
+    for char in type:
+        if char == '_':
+            __i += 1
+            __keywords.append('')
         else:
-            self.__amt_text = 'NONE'
+            __keywords[__i] += char
 
-        return self.__type_text, self.__amt_text, self.__selected_stats
+    # Set the empty Selected Stats list.
+    __selected_stats = []
+
+    # Search through every stat name.
+    for stat_name in stats.keys():
+        __check = 0
+        # Check if all required keywords are in that stat name.
+        for keyword in __keywords:
+            # If any keyword is in the stat increase the check count.
+            if keyword in stat_name: __check += 1
+            # Else break the loop and move to the next stat.
+            else: break
+
+        # Add the stat_name to selected_stats if all keywords were in the stat_name.
+        if __check == len(__keywords):
+            __selected_stats.append(stat_name)
+
+    if include_avg:
+        # Find the average as long as there is at least 1 selected stat.
+        if len(__selected_stats) >= 2:
+            __total = 0
+            # Add the sum of all selected stats.
+            for each in __selected_stats:
+                __total += stats[each]
+
+            __avg = __total // len(__selected_stats)
+
+        elif len(__selected_stats) == 1: __avg = stats[__selected_stats[0]]
+        else: __avg = 0
+        return __selected_stats,__avg
+
+    else: return __selected_stats
+
+# Converts the type and amount into readable text forms.
+def type_text_select(type,amt,cost_rwd):
+    # Returns the selected stats, and the total count.
+    __selected_stats, __avg = find_stat_types(type,include_avg=True)
+
+    # Set the unit, v if a cost, ^ if a reward, and E in any other case.
+    __unit = '- ' if cost_rwd == 'cost' else '+' if cost_rwd == 'rwd' else 'Error'
+
+    # Set the amount text depending on what percentage of the existing stats are being changed.
+    if __avg == 0:
+        __amt_text = 'N/A'
+    elif amt/__avg  > 1:
+        __amt_text = __unit * 5
+    elif amt/__avg  > .60 and amt/__avg  <= 1:
+        __amt_text = __unit * 4
+    elif amt/__avg  > .30 and amt/__avg  <= .60:
+        __amt_text = __unit * 3
+    elif amt/__avg  > .10 and amt/__avg  <= .30:
+        __amt_text = __unit * 2
+    elif amt/__avg  > 0 and amt/__avg  <= .10:
+        __amt_text = __unit * 1
+    else:
+        __amt_text = 'NONE'
+
+    # Remove any Underscores.
+    __temp = type.replace('_',' ')
+
+    # Capitalize each word.
+    __type_text = __temp.title()
+
+    return __type_text, __amt_text, __selected_stats
 
 # General function for updating the minutes, hours, days, years, and age.
 def update_time(minutes):
