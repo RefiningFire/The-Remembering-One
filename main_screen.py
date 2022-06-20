@@ -229,9 +229,7 @@ class MainScreen(Screen):
 
         # Clear the type and amount holders. They will be used when binding the option button.
         self.cur_opt_cost_type = []
-        self.cur_opt_cost_type_text = []
         self.cur_opt_cost_amt = []
-        self.cur_opt_cost_amt_text = []
         self.cur_opt_rwd_type = []
         self.cur_opt_rwd_amt = []
         self.cur_opt_new_cards = []
@@ -239,17 +237,21 @@ class MainScreen(Screen):
         # Iterate over each resource cost.
         for i in range(len(self.__options[self.__cur_opt]['cost_type'])):
 
-            # The current cost type.
+            # The current cost type, returned as a list of matching types.
             self.__cost_type = self.__options[self.__cur_opt]['cost_type'][i]
             # The current cost amount.
             self.__cost_amt = self.__options[self.__cur_opt]['cost_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text,self.__selected_stats  = type_text_select(self.__cost_type,self.__cost_amt,'cost')
+            self.__type_text,self.__amt_text = type_text_select(self.__cost_type,self.__cost_amt,'cost')
 
-            # Save the option type and amt to the button so they can change.
-            self.cur_opt_cost_type.append(self.__cost_type)
-            self.cur_opt_cost_amt.append(self.__cost_amt)
+            # Create lists of the selected stats and amounts.
+            self.__selected_stats, self.__selected_amts = find_stat_types(self.__cost_type,amt=self.__cost_amt)
+
+            # Save the reward type and amt to the button so they can change.
+            for i in range(len(self.__selected_stats)):
+                self.cur_opt_cost_type.append(self.__selected_stats[i])
+                self.cur_opt_cost_amt.append(self.__selected_amts[i])
 
             # Add a label for each cost.
             self.option_cost = Label(
@@ -275,6 +277,14 @@ class MainScreen(Screen):
             self.opt3_cost_types = self.cur_opt_cost_type
             self.opt3_cost_amt = self.cur_opt_cost_amt
             self.opt3_time = self.__time_cost
+        elif each == 3:
+            self.opt4_cost_types = self.cur_opt_cost_type
+            self.opt4_cost_amt = self.cur_opt_cost_amt
+            self.opt4_time = self.__time_cost
+        elif each == 4:
+            self.opt5_cost_types = self.cur_opt_cost_type
+            self.opt5_cost_amt = self.cur_opt_cost_amt
+            self.opt5_time = self.__time_cost
 
         # Iterate over each reward.
         for i in range(len(self.__options[self.__cur_opt]['rwd_type'])):
@@ -285,11 +295,16 @@ class MainScreen(Screen):
             self.__rwd_amt = self.__options[self.__cur_opt]['rwd_amt'][i]
 
             # Convert the background ID's and numbers into readable text.
-            self.__type_text,self.__amt_text,self.__selected_stats  = type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
+            self.__type_text,self.__amt_text = type_text_select(self.__rwd_type,self.__rwd_amt,'rwd')
+
+            # Create lists of the selected stats and amounts.
+            self.__selected_stats, self.__selected_amts = find_stat_types(self.__rwd_type,amt=self.__rwd_amt)
 
             # Save the reward type and amt to the button so they can change.
-            self.cur_opt_rwd_type.append(self.__rwd_type)
-            self.cur_opt_rwd_amt.append(self.__rwd_amt)
+            for i in range(len(self.__selected_stats)):
+                self.cur_opt_rwd_type.append(self.__selected_stats[i])
+                self.cur_opt_rwd_amt.append(self.__selected_amts[i])
+
 
             # Add a label for each reward.
             self.option_reward = Label(
@@ -319,7 +334,14 @@ class MainScreen(Screen):
             self.opt3_rwd_types = self.cur_opt_rwd_type
             self.opt3_rwd_amt = self.cur_opt_rwd_amt
             self.opt3_new_cards = self.cur_opt_new_cards
-
+        elif each == 3:
+            self.opt4_rwd_types = self.cur_opt_rwd_type
+            self.opt4_rwd_amt = self.cur_opt_rwd_amt
+            self.opt4_new_cards = self.cur_opt_new_cards
+        elif each == 4:
+            self.opt5_rwd_types = self.cur_opt_rwd_type
+            self.opt5_rwd_amt = self.cur_opt_rwd_amt
+            self.opt5_new_cards = self.cur_opt_new_cards
 
         # Bind the cost and rewards to the option button.
         if each == 0:
@@ -328,6 +350,10 @@ class MainScreen(Screen):
             self.option_btn.bind(on_press=self.opt2_select)
         elif each == 2:
             self.option_btn.bind(on_press=self.opt3_select)
+        elif each == 3:
+            self.option_btn.bind(on_press=self.opt4_select)
+        elif each == 4:
+            self.option_btn.bind(on_press=self.opt5_select)
 
         # Add all the cost layout to the option layout.
         self.option_layout.add_widget(self.option_cost_layout)
@@ -392,7 +418,7 @@ class MainScreen(Screen):
     # Each options selection iterates through the items in the options button and updates the stats.
     def opt1_select(self,instance):
         for item in range(len(self.opt1_cost_types)):
-            stats[self.opt1_cost_types[item]] += self.opt1_cost_amt[item]
+            stats[self.opt1_cost_types[item]] -= self.opt1_cost_amt[item]
         for item in range(len(self.opt1_rwd_types)):
             stats[self.opt1_rwd_types[item]] += self.opt1_rwd_amt[item]
         for card in self.opt1_new_cards:
@@ -402,7 +428,7 @@ class MainScreen(Screen):
         self.discard_card()
     def opt2_select(self,instance):
         for item in range(len(self.opt2_cost_types)):
-            stats[self.opt2_cost_types[item]] += self.opt2_cost_amt[item]
+            stats[self.opt2_cost_types[item]] -= self.opt2_cost_amt[item]
         for item in range(len(self.opt2_rwd_types)):
             stats[self.opt2_rwd_types[item]] += self.opt2_rwd_amt[item]
         for card in self.opt2_new_cards:
@@ -412,12 +438,32 @@ class MainScreen(Screen):
         self.discard_card()
     def opt3_select(self,instance):
         for item in range(len(self.opt3_cost_types)):
-            stats[self.opt3_cost_types[item]] += self.opt3_cost_amt[item]
+            stats[self.opt3_cost_types[item]] -= self.opt3_cost_amt[item]
         for item in range(len(self.opt3_rwd_types)):
             stats[self.opt3_rwd_types[item]] += self.opt3_rwd_amt[item]
         for card in self.opt3_new_cards:
             self.add_card(card)
         update_time(self.opt3_time)
+        self.load_buttons()
+        self.discard_card()
+    def opt4_select(self,instance):
+        for item in range(len(self.opt4_cost_types)):
+            stats[self.opt4_cost_types[item]] -= self.opt4_cost_amt[item]
+        for item in range(len(self.opt4_rwd_types)):
+            stats[self.opt4_rwd_types[item]] += self.opt4_rwd_amt[item]
+        for card in self.opt4_new_cards:
+            self.add_card(card)
+        update_time(self.opt4_time)
+        self.load_buttons()
+        self.discard_card()
+    def opt5_select(self,instance):
+        for item in range(len(self.opt5_cost_types)):
+            stats[self.opt5_cost_types[item]] -= self.opt5_cost_amt[item]
+        for item in range(len(self.opt5_rwd_types)):
+            stats[self.opt5_rwd_types[item]] += self.opt5_rwd_amt[item]
+        for card in self.opt5_new_cards:
+            self.add_card(card)
+        update_time(self.opt5_time)
         self.load_buttons()
         self.discard_card()
 
@@ -480,10 +526,14 @@ class MainScreen(Screen):
         self.__ids.food_fill.size = ((stats['food_reserves']/stats['food_storage'])*100, self.__ids.food_fill.parent.height)
 
 # From an option text, returns all stat types (and their sum) that fall under the category of the option text. i.e. 'farmer_count' includes 'male_farmer_count' and 'female_farmer_count'
-def find_stat_types(type,include_avg=False):
+def find_stat_types(type,amt=0,include_avg=False):
+
     # Set initial keywords list to one empty string, and the index to 0.
     __keywords = ['']
     __i = 0
+
+    # Set the empty Selected Stats list.
+    __selected_stats = []
 
     # Add each character to the current keyword list index. Create a new index and empty list item if the character is '_'
     for char in type:
@@ -493,22 +543,17 @@ def find_stat_types(type,include_avg=False):
         else:
             __keywords[__i] += char
 
-    # Set the empty Selected Stats list.
-    __selected_stats = []
+    # Look through each stat name.
+    for stat_name in stat_list:
 
-    # Search through every stat name.
-    for stat_name in stats.keys():
-        __check = 0
-        # Check if all required keywords are in that stat name.
-        for keyword in __keywords:
-            # If any keyword is in the stat increase the check count.
-            if keyword in stat_name: __check += 1
-            # Else break the loop and move to the next stat.
-            else: break
+        # Return True if all keywords are in the stat name.
+        __fits = all(word in stat_name[1:] for word in __keywords)
 
-        # Add the stat_name to selected_stats if all keywords were in the stat_name.
-        if __check == len(__keywords):
-            __selected_stats.append(stat_name)
+        # If the stat name fits, append the full name to the selected stats list.
+        if __fits: __selected_stats.append(stat_name[0])
+
+    if amt > 0: __amt = [amt for i in range(len(__selected_stats))]
+
 
     if include_avg:
         # Find the average as long as there is at least 1 selected stat.
@@ -522,9 +567,13 @@ def find_stat_types(type,include_avg=False):
 
         elif len(__selected_stats) == 1: __avg = stats[__selected_stats[0]]
         else: __avg = 0
-        return __selected_stats,__avg
 
-    else: return __selected_stats
+        if amt == 0: return __selected_stats,__avg
+        else: return __selected_stats,__amt,__avg
+
+    else:
+        if amt == 0: return __selected_stats
+        else: return __selected_stats,__amt
 
 # Converts the type and amount into readable text forms.
 def type_text_select(type,amt,cost_rwd):
@@ -556,7 +605,7 @@ def type_text_select(type,amt,cost_rwd):
     # Capitalize each word.
     __type_text = __temp.title()
 
-    return __type_text, __amt_text, __selected_stats
+    return __type_text, __amt_text
 
 # General function for updating the minutes, hours, days, years, and age.
 def update_time(minutes):

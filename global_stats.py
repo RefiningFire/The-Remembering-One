@@ -130,6 +130,36 @@ def make_deck(deck_file):
 
     return d
 
+# Creates a list of lists for each stat name, consisting of the full name in the [0] index followed by each individual word.
+def make_stat_lists():
+
+    # Create empty list and index.
+    __returned_stat_list = []
+    __stat_index = 0
+
+    # Iterate through each full stat name.
+    for stat_name in stats.keys():
+
+        # Add the full stat name plus an empty string item.
+        __returned_stat_list.append([stat_name,''])
+
+        # Set the initial word index at 1.
+        __word = 1
+
+        # Add each character to the current stat_name list index. Create a new index and empty list item if the character is '_'
+        for char in stat_name:
+            if char == '_':
+                __word += 1
+                __returned_stat_list[__stat_index].append('')
+            else:
+                __returned_stat_list[__stat_index][__word] += char
+
+        # Set the index for the next stat name.
+        __stat_index += 1
+
+    return __returned_stat_list
+
+
 sm = ScreenManager(transition=SlideTransition())
 
 
@@ -149,3 +179,6 @@ all_used_cards = {}
 
 # Create the 'on deck' deck, where cards go once selected, but before actually added to the main deck.
 to_be_added = {}
+
+# Create a list of the words in each stat, for use in assigning stat increase/decreases.
+stat_list = make_stat_lists()
