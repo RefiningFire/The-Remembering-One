@@ -47,7 +47,7 @@ stats = {
 
     'wake_time':5,'breakfast_start':6,'breakfast_end':7,'council_start':8,'council_end':18,'dinner_start':19,'dinner_end':20,'sleep_time':22,
 
-    'player_name':'John','stamina':20,
+    'player_first_name':'John','player_last_name':'Markin','stamina':20,
     'pc_str':8,'pc_dex':8,'pc_int':8,'pc_wis':8,'pc_con':8,'pc_cha':8,
 
     'current_card_id':''
@@ -165,6 +165,8 @@ sm = ScreenManager(transition=SlideTransition())
 
 main_deck = make_deck('decks/starting.tsv')
 main_deck.update(make_deck('decks/greenhouse.tsv'))
+
+print(main_deck)
 
 all_unused_cards = make_deck('decks/utility.tsv')
 #all_unused_cards.update(make_deck('summer_deck.tsv'))
